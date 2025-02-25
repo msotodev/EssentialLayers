@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>12.0</LangVersion>
+		<Description>Essential.Layers is a library based in a `way of work functional to start a project from scratch` with a structure designed with Result handling, Cache, Error handling, Helpers &amp; Extensions.</Description>
+		<Product>$(AssemblyName)</Product>
+		<Company>Mario Soto Moreno Co</Company>
+		<Copyright>mariosotomor.dev@gmail.com</Copyright>
+		<PackageProjectUrl>https://essentiallayers.dev</PackageProjectUrl>
+		<PackageIcon>essential-layers.png</PackageIcon>
+		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
+		<PackageReadmeFile>Readme.md</PackageReadmeFile>
+		<Version>1.6.0</Version>
+		<Title>$(AssemblyName)</Title>
+		<PackageReleaseNotes>Serializer has changed from System.Text.Json to Newtonsoft.Json</PackageReleaseNotes>
+		<Authors>MSoto</Authors>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\shared\essential-layers.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.2" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>
