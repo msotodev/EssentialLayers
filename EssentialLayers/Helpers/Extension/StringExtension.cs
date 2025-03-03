@@ -9,36 +9,43 @@ namespace EssentialLayers.Helpers.Extension
 	{
 		public static bool IsEmpty(this string self)
 		{
+			if (self == null) return true;
+
 			return string.IsNullOrEmpty(self);
 		}
 
 		public static bool NotEmpty(this string self)
 		{
+			if (self == null) return false;
+
 			return !string.IsNullOrEmpty(self);
 		}
 
 		public static bool Match(this string self, string pattern)
 		{
+			if (self.IsEmpty()) return false;
+
 			return new Regex(pattern).IsMatch(self);
 		}
 
 		public static bool NoMatch(this string self, string pattern)
 		{
+			if (self.IsEmpty()) return false;
+
 			return !new Regex(pattern).IsMatch(self);
 		}
 
 		public static bool NotEquals(this string self, string another)
 		{
-			if (self != null)
-			{
-				return !self.Equals(another);
-			}
+			if (self != null) return !self.Equals(another);
 
 			return false;
 		}
 
 		public static string RegexReplace(this string self, string pattern, string replacement)
 		{
+			if (self.IsEmpty()) return string.Empty;
+
 			return new Regex(pattern).Replace(self, replacement);
 		}
 
@@ -75,21 +82,29 @@ namespace EssentialLayers.Helpers.Extension
 
 		public static bool MinLength(this string self, int length)
 		{
+			if (self.IsEmpty()) return false;
+
 			return self.Length >= length;
 		}
 
 		public static bool Length(this string self, int length)
 		{
+			if (self.IsEmpty()) return false;
+
 			return self.Length == length;
 		}
 
 		public static bool MaxLength(this string self, int length)
 		{
+			if (self.IsEmpty()) return false;
+
 			return self.Length <= length;
 		}
 
 		public static string FirstUpperWord(this string self)
 		{
+			if (self.IsEmpty()) return string.Empty;
+
 			string first = string.Empty;
 
 			foreach (char s in self)
@@ -104,6 +119,8 @@ namespace EssentialLayers.Helpers.Extension
 
 		public static string WrapText(this string self, int n, bool wrap = true)
 		{
+			if (self.IsEmpty()) return string.Empty;
+
 			string value = self;
 
 			if (wrap && self.NotNull() && self.Length > n) value = self[..n] + "...";
@@ -130,9 +147,12 @@ namespace EssentialLayers.Helpers.Extension
 			char[] replacement = ['a', 'a', 'e', 'e', 'i', 'i', 'n', 'o', 'o', 'A', 'E', 'I', 'O', 'U'];
 			char[] accents = ['à', 'á', 'é', 'è', 'ì', 'í', 'ñ', 'ò', 'ó', 'Á', 'É', 'Í', 'Ó', 'Ú'];
 
-			for (int i = 0; i < accents.Length; i++)
+			if (self.NotEmpty())
 			{
-				self = self.Replace(accents[i], replacement[i]);
+				for (int i = 0; i < accents.Length; i++)
+				{
+					self = self.Replace(accents[i], replacement[i]);
+				}
 			}
 
 			return self;
