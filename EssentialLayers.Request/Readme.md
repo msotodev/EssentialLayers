@@ -20,13 +20,28 @@ app.Services.ConfigureRequest(
 		BaseUri = "https/api.dev",
 		AppName = "MyApi",
 		AppVersion = "v1",
-		CastResultAsResultHelper = true,
 		InsensitiveMapping = true
 	}
 );
 ```
 
+If you want manage multiple instances of the same service, you can use the following code:
+
+1. Inject the IHttpService or IRequestService
+2. Set configs on runtime
+
+```
+yourService.SetOptions(
+	new HttpOption
+	{
+		BaseUri = YOUR_BASE_URI,
+		Token = YOUR_TOKEN
+	}
+);
+```
+
 #### Release Notes
+ - Reverted dependency type from Singleton to Scoped to allow multiple instances of the same service `05-03-2025`
  - The HttpService and RequestService classes are now public `21-02-2025`
  - Implementation of IHttpClientFactory to better dependency manage of the "HttpClient" `18-02-2025`
  - It was solved the way of configure globally (ConfigureRequest) in the program file `23-01-2025`

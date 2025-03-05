@@ -14,8 +14,8 @@ namespace EssentialLayers.Request
 		)
 		{
 			services.AddHttpClient();
-			services.TryAddSingleton<IHttpService, HttpService>();
-			services.TryAddSingleton<IRequestService, RequestService>();
+			services.TryAddScoped<IHttpService, HttpService>();
+			services.TryAddScoped<IRequestService, RequestService>();
 
 			return services;
 		}
@@ -24,8 +24,10 @@ namespace EssentialLayers.Request
 			this IServiceProvider provider, HttpOption httpOption
 		)
 		{
-			IHttpService httpService = provider.GetRequiredService<IHttpService>();
-			IRequestService requestService = provider.GetRequiredService<IRequestService>();
+			using IServiceScope scope = provider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+
+			IHttpService httpService = scope.ServiceProvider.GetRequiredService<IHttpService>();
+			IRequestService requestService = scope.ServiceProvider.GetRequiredService<IRequestService>();
 
 			httpService.SetOptions(httpOption);
 			requestService.SetOptions(httpOption);
