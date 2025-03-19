@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -165,6 +166,11 @@ namespace EssentialLayers.Helpers.Extension
 			byte[] bytes = Encoding.UTF8.GetBytes(self);
 
 			return new MemoryStream(bytes);
+		}
+
+		public static T ConvertToType<T>(string value)
+		{
+			return (T)Convert.ChangeType(value, typeof(T));
 		}
 	}
 }

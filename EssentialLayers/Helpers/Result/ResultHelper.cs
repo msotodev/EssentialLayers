@@ -1,5 +1,5 @@
 ﻿using EssentialLayers.Helpers.Extension;
-using EssentialLayers.Helpers.Logger;
+using Newtonsoft.Json;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -26,23 +26,18 @@ namespace EssentialLayers.Helpers.Result
 			[CallerLineNumber] int lineNumber = 0
 		)
 		{
-			Type type = e.GetType();
-
-			if (ErrorMessages.Messages.TryGetValue(type, out string message) && message.NotNull()) return new ResultHelper<T>(
-				false, message, default!
+			if (e.InnerException is JsonSerializationException jsonEx) return Fail(
+				$"Error de deserialización en la ruta '{jsonEx.Path}': {jsonEx.Message}"
 			);
 
-			var errorMessage = new
+			Type type = e.InnerException?.GetType();
+
+			if (type != null && ErrorMessages.Messages.TryGetValue(type, out string message) && message.NotNull())
 			{
-				file,
-				member,
-				lineNumber,
-				message
-			};
-
-			LoggerHelper<ResultHelper<T>>.Error(
-				e, errorMessage.Serialize(true)
-			);
+				return new ResultHelper<T>(
+					false, message, default!
+				);
+			}
 
 			return Fail(e.Message);
 		}

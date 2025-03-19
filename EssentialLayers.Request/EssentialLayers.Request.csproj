@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.3.0</Version>
+		<Version>1.4.0</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Request is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.</Description>
@@ -17,7 +17,8 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Request Http Delete Get Post Put</PackageTags>
-		<PackageReleaseNotes> - Reverted dependency type from Singleton to Scoped to allow multiple instances of the same service `05-03-2025`
+		<PackageReleaseNotes> - Res
+ - Reverted dependency type from Singleton to Scoped to allow multiple instances of the same service `05-03-2025`
  - The HttpService and RequestService classes are now public `21-02-2025`
  - Implementation of IHttpClientFactory to better dependency manage of the "HttpClient" `18-02-2025`
  - It was solved the way of configure globally (ConfigureRequest) in the program file `23-01-2025`

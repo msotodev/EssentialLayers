@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace EssentialLayers.Helpers.Result
 			{typeof(TaskCanceledException), $"La operación no pudo ser completada"},
 			{typeof(InvalidOperationException), $"La llave no se encontró en el diccionario"},
 			{typeof(HttpRequestException), $"La llave no se encontró en el diccionario"},
+			{typeof(JsonException), "Error en la deserialización"},
 		};
 	}
 }

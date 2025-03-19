@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using static EssentialLayers.Request.Helpers.Types.HttpTypes;
 
 namespace EssentialLayers.Request.Models
 {
@@ -33,6 +34,8 @@ namespace EssentialLayers.Request.Models
 		public string ContentType { get; set; } = "application/json";
 
 		public string BaseUri { get; set; } = string.Empty;
+
+		public ResultType ResultType { get; set; } = ResultType.Object;
 
 		public bool InsensitiveMapping { get; set; } = true;
 	}

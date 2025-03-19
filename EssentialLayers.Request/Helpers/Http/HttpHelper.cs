@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using static EssentialLayers.Request.Helpers.Types.HttpTypes;
 
 namespace EssentialLayers.Request.Helpers.Http
 {
@@ -78,6 +79,10 @@ namespace EssentialLayers.Request.Helpers.Http
 
 				HttpResponseMessage? httpResponseMessage = null;
 
+				ResultType resultType = HttpOption.ResultType;
+
+				if (options.ResultType != ResultType.None) resultType = options.ResultType;
+
 				if (options.IsCached)
 				{
 					string key = request.Serialize();
@@ -104,7 +109,7 @@ namespace EssentialLayers.Request.Helpers.Http
 				);
 
 				return ManageResponse<TResult>(
-					httpResponseMessage.StatusCode, response, HttpOption.CastResultAsResultHelper, insensitiveMapping
+					httpResponseMessage.StatusCode, response, resultType, insensitiveMapping
 				);
 			}
 			catch (Exception e)
@@ -142,7 +147,7 @@ namespace EssentialLayers.Request.Helpers.Http
 		}
 
 		public HttpResponse<TResult> ManageResponse<TResult>(
-			HttpStatusCode httpStatusCode, string response, bool castAsResultHelper, bool insensitiveMapping
+			HttpStatusCode httpStatusCode, string response, ResultType resultType, bool insensitiveMapping
 		)
 		{
 			switch (httpStatusCode)
@@ -151,22 +156,9 @@ namespace EssentialLayers.Request.Helpers.Http
 				case HttpStatusCode.BadRequest:
 				case HttpStatusCode.InternalServerError:
 
-					if (castAsResultHelper)
-					{
-						ResultHelper<TResult> resultHelper = response.Deserialize<ResultHelper<TResult>>(insensitive: insensitiveMapping);
-
-						if (resultHelper.Ok.False()) return HttpResponse<TResult>.Fail(
-							resultHelper.Message, httpStatusCode
-						);
-
-						return HttpResponse<TResult>.Success(resultHelper.Data, httpStatusCode);
-					}
-					else
-					{
-						TResult? result = response.Deserialize<TResult>(insensitive: insensitiveMapping);
-
-						return HttpResponse<TResult>.Success(result, httpStatusCode);
-					}
+					return Deserialize<TResult>(
+						httpStatusCode, response, resultType, insensitiveMapping
+					);
 
 				case HttpStatusCode.NotFound:
 
@@ -198,13 +190,63 @@ namespace EssentialLayers.Request.Helpers.Http
 			HttpOption.AppVersion = httpOption.AppVersion;
 			HttpOption.BaseUri = httpOption.BaseUri;
 			HttpOption.BearerToken = httpOption.BearerToken;
-			HttpOption.CastResultAsResultHelper = httpOption.CastResultAsResultHelper;
+			HttpOption.ResultType = httpOption.ResultType;
 			HttpOption.InsensitiveMapping = httpOption.InsensitiveMapping;
 
 			HttpClient.BaseAddress = new Uri(httpOption.BaseUri);
 			HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
 				"Bearer", httpOption.BearerToken
 			);
+		}
+
+		private HttpResponse<TResult> Deserialize<TResult>(
+			HttpStatusCode httpStatusCode, string response, ResultType resultType, bool insensitiveMapping
+		)
+		{
+			try
+			{
+				switch (resultType)
+				{
+					case ResultType.Object:
+
+						TResult? result = response.Deserialize<TResult>(insensitive: insensitiveMapping);
+
+						return HttpResponse<TResult>.Success(result, httpStatusCode);
+
+					case ResultType.ResultHelper:
+
+						ResultHelper<TResult> resultHelper = response.Deserialize<ResultHelper<TResult>>(insensitive: insensitiveMapping);
+
+						if (resultHelper.Ok.False()) return HttpResponse<TResult>.Fail(
+							resultHelper.Message, httpStatusCode
+						);
+
+						return HttpResponse<TResult>.Success(resultHelper.Data, httpStatusCode);
+
+					case ResultType.Primitive:
+
+						try
+						{
+							TResult type = (TResult)Convert.ChangeType(response, typeof(TResult));
+
+							return HttpResponse<TResult>.Success(type, httpStatusCode);
+						}
+						catch (Exception e)
+						{
+							return HttpResponse<TResult>.Fail(e, httpStatusCode);
+						}
+
+					default:
+
+						TResult? deserialized = response.Deserialize<TResult>(insensitive: insensitiveMapping);
+
+						return HttpResponse<TResult>.Success(deserialized, httpStatusCode);
+				}
+			}
+			catch (Exception e)
+			{
+				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
+			}
 		}
 	}
 }

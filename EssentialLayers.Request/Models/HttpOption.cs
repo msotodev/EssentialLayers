@@ -1,4 +1,6 @@
-﻿namespace EssentialLayers.Request.Models
+﻿using static EssentialLayers.Request.Helpers.Types.HttpTypes;
+
+namespace EssentialLayers.Request.Models
 {
 	public class HttpOption
 	{
@@ -8,7 +10,7 @@
 
 		public string BaseUri { get; set; } = string.Empty;
 
-		public bool CastResultAsResultHelper { get; set; } = false;
+		public ResultType ResultType { get; set; } = ResultType.Object;
 
 		public bool InsensitiveMapping { get; set; } = true;
 
@@ -17,15 +19,15 @@
 		/**/
 
 		public HttpOption()
-        {
+		{
 			AppName = "AppName";
 			AppVersion = "1.0";
 			BaseUri = string.Empty;
-			CastResultAsResultHelper = false;
+			ResultType = ResultType.Object;
 			InsensitiveMapping = true;
 		}
 
-        public HttpOption(string appName, string appVersion)
+		public HttpOption(string appName, string appVersion)
 		{
 			AppName = appName;
 			AppVersion = appVersion;

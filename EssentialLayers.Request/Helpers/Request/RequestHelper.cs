@@ -109,7 +109,7 @@ namespace EssentialLayers.Request.Helpers.Request
 			HttpOption.AppVersion = httpOption.AppVersion;
 			HttpOption.BaseUri = httpOption.BaseUri;
 			HttpOption.BearerToken = httpOption.BearerToken;
-			HttpOption.CastResultAsResultHelper = httpOption.CastResultAsResultHelper;
+			HttpOption.ResultType = httpOption.ResultType;
 			HttpOption.InsensitiveMapping = httpOption.InsensitiveMapping;
 
 			HttpClient.BaseAddress = new Uri(httpOption.BaseUri);
