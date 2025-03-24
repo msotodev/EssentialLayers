@@ -1,0 +1,19 @@
+﻿button {
+	padding: 5px 10px;
+	background-color: #FFF;
+	border: 1px solid aliceblue;
+	transition: .4s ease-in;
+}
+
+button:hover {
+	border-color: rebeccapurple;
+	background-color: rebeccapurple;
+	color: #FFF;
+	transition: .4s ease-out;
+}
+
+section {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}

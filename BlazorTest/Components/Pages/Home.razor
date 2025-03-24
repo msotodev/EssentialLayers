@@ -1,7 +1,25 @@
-﻿@page "/"
+﻿@using BlazorTest.Services.AspApi
+
+@page "/"
+
+@inject IAspApiService aspApiService;
 
 <PageTitle>Home</PageTitle>
 
-<h1>Json</h1>
+<h1>Request</h1>
+<p>
+	Base Uri:
+	<a href="@($"{aspApiService.BaseUri}{Endpoint}")" target="_blank">
+		<small>@($"{aspApiService.BaseUri}{Endpoint}")</small>
+	</a>
+</p>
+<p>Method: Get</p>
 
-<textarea rows="15" cols="204">@Json</textarea>
+<section>
+	<header>
+		<button @onclick="@OnClickAll">All</button>
+		<button type="button" @onclick="@OnClickById">ById</button>
+		<button type="button" @onclick="@((e) => OnClickNameById())">NameById</button>
+	</header>
+	<textarea rows="15" cols="204">@Json</textarea>
+</section>

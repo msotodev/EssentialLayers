@@ -14,14 +14,29 @@ namespace BlazorTest.Components.Pages
 
 		public string Json { get; set; } = string.Empty;
 
+		public string Endpoint { get; set; } = string.Empty;
+
 		/**/
 
-		protected override async Task OnInitializedAsync()
+		private async Task OnClickAll()
 		{
-			//ResultHelper<IList<UserResponseDto>> result = await UsersService!.GetAllAsync();
+			ResultHelper<IList<UserResponseDto>> result = await UsersService!.GetAllAsync();
 
-			//if (result.Ok) Json = result.Data.Serialize(true);
+			Endpoint = "User/All";
+			Json = result.Ok ? result.Data.Serialize(true) : string.Empty;
+		}
 
+		public async Task OnClickById()
+		{
+			ResultHelper<UserResponseDto> result = await UsersService!.GetAsync(1);
+
+			Endpoint = $"User/ById/1";
+			Json = result.Ok ? result.Data.Serialize(true) : string.Empty;
+		}
+
+		public async Task OnClickNameById()
+		{
+			Endpoint = $"User/NameById/1";
 			Json = await UsersService!.GetNameAsync(1);
 		}
 	}

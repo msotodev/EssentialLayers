@@ -1,4 +1,5 @@
 using BlazorTest.Components;
+using BlazorTest.Services.AspApi;
 using BlazorTest.Services.Users;
 using EssentialLayers.Request;
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.UseRequest();
 
+builder.Services.AddScoped<IAspApiService, AspApiService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 
 WebApplication app = builder.Build();

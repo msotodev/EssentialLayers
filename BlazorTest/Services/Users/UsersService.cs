@@ -1,4 +1,5 @@
-﻿using Common.Dtos;
+﻿using BlazorTest.Services.AspApi;
+using Common.Dtos;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using EssentialLayers.Request.Helpers;
@@ -17,20 +18,16 @@ namespace BlazorTest.Services.Users
 		/**/
 
 		public UsersService(
-			IConfiguration configuration,
+			IAspApiService aspApiService,
 			IHttpService httpService
 		)
 		{
 			_httpService = httpService;
 
-			IConfigurationSection section = configuration.GetSection("Apis");
-
-			string baseUri = section.GetValue<string>("Local")!;
-
 			_httpService.SetOptions(
 				new HttpOption
 				{
-					BaseUri = baseUri
+					BaseUri = aspApiService.BaseUri
 				}
 			);
 		}
@@ -40,10 +37,13 @@ namespace BlazorTest.Services.Users
 		public async Task<ResultHelper<UserResponseDto>> GetAsync(int id)
 		{
 			HttpResponse<UserResponseDto> response = await _httpService.GetAsync<UserResponseDto>(
-				$"{CONTROLLER_NAME}/ById/{id}"
+				$"{CONTROLLER_NAME}/ById/{id}", new RequestOptions
+				{
+					ResultType = ResultType.ResultHelper
+				}
 			);
 
-			if (response.Ok) return ResultHelper<UserResponseDto>.Fail(response.Message);
+			if (response.Ok.False()) return ResultHelper<UserResponseDto>.Fail(response.Message);
 
 			return ResultHelper<UserResponseDto>.Success(response.Data);
 		}
@@ -64,7 +64,7 @@ namespace BlazorTest.Services.Users
 			HttpResponse<string> response = await _httpService.GetAsync<string>(
 				$"{CONTROLLER_NAME}/NameById/{id}", new RequestOptions
 				{
-					ResultType = ResultType.Primitive
+					ResultType = ResultType.Object
 				}
 			);
 
