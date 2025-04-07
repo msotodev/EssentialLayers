@@ -13,9 +13,10 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.6.1</Version>
+		<Version>1.6.2</Version>
 		<Title>$(AssemblyName)</Title>
-		<PackageReleaseNotes> - Null validation in String extensions `03/03/2025`
+		<PackageReleaseNotes> - New TryHanlder and fixed issues in Capitalize extension `07/04/2025`
+ - Null validation in String extensions `03/03/2025`
  - Serializer has changed from System.Text.Json to Newtonsoft.Json `18/02/2025`
  - Updating of nuget packages to the last version `18/02/2025`
  - New compress methods to bytes array and streams `13/01/2025`</PackageReleaseNotes>
