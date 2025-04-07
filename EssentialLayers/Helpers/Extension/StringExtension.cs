@@ -52,19 +52,19 @@ namespace EssentialLayers.Helpers.Extension
 
 		public static string Capitalize(this string self, string separator = " ")
 		{
-			string[] result = [];
+			StringBuilder builder = new();
 
-			if (self != null)
+			if (self.NotEmpty())
 			{
 				string[] words = self.Split(separator);
 
 				foreach (string word in words)
 				{
-					result.Append(char.ToUpper(word[0]) + word[1..].ToLower());
+					builder.Append($"{char.ToUpper(word[0])}{word[1..].ToLower()}{separator}");
 				}
 			}
 
-			return string.Join(separator, result);
+			return builder.ToString();
 		}
 
 		public static bool HasDigits(this string self)
