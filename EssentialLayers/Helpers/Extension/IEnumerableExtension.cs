@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 
@@ -123,6 +124,11 @@ namespace EssentialLayers.Helpers.Extension
 			}
 
 			return [];
+		}
+
+		public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> self)
+		{
+			return new ObservableCollection<T>(self);
 		}
 	}
 }
