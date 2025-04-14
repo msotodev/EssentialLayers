@@ -1,5 +1,4 @@
-﻿using BlazorTest.Services.AspApi;
-using Common.Dtos;
+﻿using Common.Dtos;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using EssentialLayers.Request.Helpers;
@@ -9,28 +8,13 @@ using static EssentialLayers.Request.Helpers.Types.HttpTypes;
 
 namespace BlazorTest.Services.Users
 {
-	public class UsersService : IUsersService
+	public class UsersService(
+		IHttpService httpService
+		) : IUsersService
 	{
 		private const string CONTROLLER_NAME = "User";
 
-		private readonly IHttpService _httpService;
-
-		/**/
-
-		public UsersService(
-			IAspApiService aspApiService,
-			IHttpService httpService
-		)
-		{
-			_httpService = httpService;
-
-			_httpService.SetOptions(
-				new HttpOption
-				{
-					BaseUri = aspApiService.BaseUri
-				}
-			);
-		}
+		private readonly IHttpService _httpService = httpService;
 
 		/**/
 
