@@ -155,6 +155,7 @@ namespace EssentialLayers.Request.Helpers.Http
 				case HttpStatusCode.OK:
 				case HttpStatusCode.BadRequest:
 				case HttpStatusCode.InternalServerError:
+				case HttpStatusCode.Created:
 
 					return Deserialize<TResult>(
 						httpStatusCode, response, resultType, insensitiveMapping
@@ -176,6 +177,12 @@ namespace EssentialLayers.Request.Helpers.Http
 
 					return HttpResponse<TResult>.Fail(
 						"The request is forbidden", httpStatusCode
+					);
+
+				case HttpStatusCode.Unauthorized:
+
+					return HttpResponse<TResult>.Fail(
+						"The request is unauthorized, set the token", httpStatusCode
 					);
 
 				default:
