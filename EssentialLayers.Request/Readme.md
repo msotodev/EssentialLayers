@@ -41,6 +41,7 @@ yourService.SetOptions(
 ```
 
 #### Release Notes
+ - Now, the status "Created" is considered to be a successful response and "Unauthorized" to notify by message "Unauthorized" `14/04/2025`
  - Reverted dependency type from Singleton to Scoped to allow multiple instances of the same service `05-03-2025`
  - The HttpService and RequestService classes are now public `21-02-2025`
  - Implementation of IHttpClientFactory to better dependency manage of the "HttpClient" `18-02-2025`
