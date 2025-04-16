@@ -22,6 +22,15 @@ namespace EssentialLayers.Request.Services.Http
 			);
 		}
 
+		public async Task<HttpResponse<TResult>> DeleteAsync<TResult>(
+			string url, RequestOptions? options = null
+		)
+		{
+			return await HttpHelper.SendAsync<TResult, object>(
+				null, url, HttpMethod.Delete, options
+			);
+		}
+
 		public async Task<HttpResponse<TResult>> GetAsync<TResult>(
 			string url, RequestOptions? options = null
 		)
