@@ -6,19 +6,19 @@ namespace EssentialLayers.Request.Services.Request
 {
 	public interface IRequestService
 	{
-		Task<HttpResponseMessage> DeleteAsync<TRequest>(
+		Task<HttpResponseMessage?> DeleteAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		);
 
-		Task<HttpResponseMessage> GetAsync<TRequest>(
+		Task<HttpResponseMessage?> GetAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		);
 
-		Task<HttpResponseMessage> PostAsync<TRequest>(
+		Task<HttpResponseMessage?> PostAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		);
 
-		Task<HttpResponseMessage> PutAsync<TRequest>(
+		Task<HttpResponseMessage?> PutAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		);
 

@@ -41,6 +41,7 @@ yourService.SetOptions(
 ```
 
 #### Release Notes
+ - Now all methods of RequestService & RequestHelper allows nullable results; It was fixed issue in uribase `21-05-2025`
  - New Delete method in HttpService only with url `16-04-2025`
  - Reverted dependency type from Scoped to Singleton; Because always allows the overriding of base uri `14-04-2025`
  - Now, the status "Created" is considered to be a successful response and "Unauthorized" to notify by message "Unauthorized" `14/04/2025`
