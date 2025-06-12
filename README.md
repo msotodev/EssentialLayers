@@ -2,6 +2,10 @@
 
 # Essential Layers Solution
 
+| Package |  Version | Popularity |
+| ------- | ----- | ----- |
+| `EssentialLayers` | [![NuGet](https://img.shields.io/badge/nuget-v1.6.3-156bba?style=flat&logo=nuguet)](https://www.nuget.org/packages/EssentialLayers) | [![Nuget](https://img.shields.io/badge/dowloads-5.6K-4ec820?style=flat&logo=nuguet)](https://www.nuget.org/packages/EssentialLayers) |
+
 ### [EssentialLayers](/EssentialLayers/Readme.md)
 
 Essential layers is a layer library for starting projects from scratch with a robust structure through the management of results, cache, error handling, helpers and extensions.
