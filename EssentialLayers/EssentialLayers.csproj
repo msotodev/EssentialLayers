@@ -13,9 +13,11 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.6.3</Version>
+		<Version>1.6.4</Version>
 		<Title>$(AssemblyName)</Title>
-		<PackageReleaseNotes> - New TryHanlder and fixed issues in Capitalize extension `07/04/2025`
+		<PackageReleaseNotes> - New Response design pattern to manage responses of methods and override to Success in ResultHelper `29/07/2025`
+ - Better implementation of RemoveDiacritics; New parameter 'includeWhiteSpaces' in IsEmpty and NotEmpty in String extensions `21-05-2025`
+ - New TryHanlder and fixed issues in Capitalize extension `07/04/2025`
  - Null validation in String extensions `03/03/2025`
  - Serializer has changed from System.Text.Json to Newtonsoft.Json `18/02/2025`
  - Updating of nuget packages to the last version `18/02/2025`
