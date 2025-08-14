@@ -176,6 +176,15 @@ namespace EssentialLayers.Helpers.Extension
 			return new MemoryStream(bytes);
 		}
 
+		public static string ToBase64(this string self)
+		{
+			byte[] bytes = Encoding.UTF8.GetBytes(self);
+
+			string base64 = Convert.ToBase64String(bytes);
+
+			return base64;
+		}
+
 		public static T ConvertToType<T>(string value)
 		{
 			return (T)Convert.ChangeType(value, typeof(T));
