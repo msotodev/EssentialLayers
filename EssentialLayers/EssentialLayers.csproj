@@ -13,7 +13,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.6.4</Version>
+		<Version>1.6.5</Version>
 		<Title>$(AssemblyName)</Title>
 		<PackageReleaseNotes> - New Response design pattern to manage responses of methods and override to Success in ResultHelper `29/07/2025`
  - Better implementation of RemoveDiacritics; New parameter 'includeWhiteSpaces' in IsEmpty and NotEmpty in String extensions `21-05-2025`
