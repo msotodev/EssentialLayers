@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 
 namespace EssentialLayers.Helpers.Extension
 {
@@ -105,30 +104,79 @@ namespace EssentialLayers.Helpers.Extension
 			return string.Join(separator, self);
 		}
 
-		public static Dictionary<string, TValue> ToDictionary<TValue, T>(this T self)
-		{
-			if (self != null)
-			{
-				Dictionary<string, TValue> dictionary = [];
-
-				foreach (PropertyInfo property in self.GetType().GetProperties())
-				{
-					TValue value = (TValue)property.GetValue(self, null);
-
-					string key = property.Name;
-
-					dictionary.Add(key, value);
-				}
-
-				return dictionary;
-			}
-
-			return [];
-		}
-
-		public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> self)
+		public static ObservableCollection<T> ToObservableCollection<T>(
+			this IEnumerable<T> self
+		)
 		{
 			return new ObservableCollection<T>(self);
+		}
+
+		public static bool TryFirst<T>(this IEnumerable<T> self, out T value)
+		{
+			T first = self.FirstOrDefault();
+
+			if (first != null)
+			{
+				value = first;
+
+				return true;
+			}
+
+			value = default;
+
+			return false;
+		}
+
+		public static bool TryFirst<T>(
+			this IEnumerable<T> self, Func<T, bool> predicate, out T value
+		)
+		{
+			T first = self.FirstOrDefault(predicate);
+
+			if (first != null)
+			{
+				value = first;
+
+				return true;
+			}
+
+			value = default;
+
+			return false;
+		}
+
+		public static bool TrySingle<T>(this IEnumerable<T> self, out T value)
+		{
+			T first = self.Single();
+
+			if (first != null)
+			{
+				value = first;
+
+				return true;
+			}
+
+			value = default;
+
+			return false;
+		}
+
+		public static bool TrySingle<T>(
+			this IEnumerable<T> self, Func<T, bool> predicate, out T value
+		)
+		{
+			T first = self.Single(predicate);
+
+			if (first != null)
+			{
+				value = first;
+
+				return true;
+			}
+
+			value = default;
+
+			return false;
 		}
 	}
 }
