@@ -41,6 +41,7 @@ yourService.SetOptions(
 ```
 
 #### Release Notes
+ - Updating of nuget packages EssentialLayers and Microsoft.Extensions.Http `27/08/2025`
  - Remove repeated headers `17-07-2025`
  - Now all methods of RequestService & RequestHelper allows nullable results; It was fixed issue in uribase `21-05-2025`
  - New Delete method in HttpService only with url `16-04-2025`
