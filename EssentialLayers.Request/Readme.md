@@ -41,6 +41,11 @@ yourService.SetOptions(
 ```
 
 #### Release Notes
+ - Updating of nuget packages EssentialLayers and Microsoft.Extensions.Http `27/08/2025`
+ - Remove repeated headers `17-07-2025`
+ - Now all methods of RequestService & RequestHelper allows nullable results; It was fixed issue in uribase `21-05-2025`
+ - New Delete method in HttpService only with url `16-04-2025`
+ - Reverted dependency type from Scoped to Singleton; Because always allows the overriding of base uri `14-04-2025`
  - Now, the status "Created" is considered to be a successful response and "Unauthorized" to notify by message "Unauthorized" `14/04/2025`
  - Reverted dependency type from Singleton to Scoped to allow multiple instances of the same service `05-03-2025`
  - The HttpService and RequestService classes are now public `21-02-2025`
@@ -50,7 +55,7 @@ yourService.SetOptions(
  - It was added a new HttpHelper `12/12/2024`
  - It was removed the TRequest at the method GetAsync + Logs `06/12/2024`
  - Solved issue on serialize() & Added insensitiveMapping with default true `12/11/2024`
- - It was added a content type in a Request and changed the models location + Fixed reponse issue `05/11/2024`
+ - It was added a content type in a Request and changed the models location + Fixed response issue `05/11/2024`
  - It's added "CastResultAsResultHelper" parameter at HttpOption model in HttpService `29/10/2024`
 
 Created by [Mario Soto Moreno](https://github.com/MatProgrammerSM)

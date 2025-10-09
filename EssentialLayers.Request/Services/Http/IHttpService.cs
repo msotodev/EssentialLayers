@@ -10,6 +10,10 @@ namespace EssentialLayers.Request.Services.Http
 			TRequest request, string url, RequestOptions? options = null
 		);
 
+		Task<HttpResponse<TResult>> DeleteAsync<TResult>(
+			string url, RequestOptions? options = null
+		);
+
 		Task<HttpResponse<TResult>> GetAsync<TResult>(
 			string url, RequestOptions? options = null
 		);

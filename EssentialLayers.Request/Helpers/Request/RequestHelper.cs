@@ -29,39 +29,50 @@ namespace EssentialLayers.Request.Helpers.Request
 			};
 		}
 
-		public async Task<HttpResponseMessage> SendAsync<TRequest>(
+		public async Task<HttpResponseMessage?> SendAsync<TRequest>(
 			TRequest request, string url, HttpMethod httpMethod,
 			RequestOptions? options
 		)
 		{
 			try
 			{
-				options ??= new RequestOptions();
+				RequestOptions requestOptions = options ?? new()
+				{
+					ResultType = HttpOption.ResultType,
+					InsensitiveMapping = HttpOption.InsensitiveMapping,
+					BearerToken = HttpOption.BearerToken,
+					BaseUri = HttpOption.BaseUri
+				};
 
 				HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
 					$"{HttpOption.AppName}/{HttpOption.AppVersion}"
 				);
 
-				foreach (KeyValuePair<string, string> header in options.Headers!)
+				foreach (KeyValuePair<string, string> header in requestOptions.Headers!)
 				{
 					HttpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 				}
 
 				string jsonRequest = request.Serialize();
-				string bearerToken = options.BearerToken.NotEmpty() ? options.BearerToken : string.Empty;
-				ResultHelper<HttpContent> contentResult = request.ToHttpContent(options.ContentType);
+				string bearerToken = requestOptions.BearerToken.NotEmpty() ? requestOptions.BearerToken : string.Empty;
 
+				ResultHelper<HttpContent> contentResult = request.ToHttpContent(requestOptions.ContentType);
+
+				string uri = url;
+				
 				GlobalFunctions.Info(url, httpMethod.Method, jsonRequest);
+
+				if (HttpClient.BaseAddress.NotNull()) uri = $"{HttpClient.BaseAddress!.AbsoluteUri}{url}";
 
 				using HttpRequestMessage httpRequestMessage = new()
 				{
 					Content = contentResult.Data,
-					RequestUri = new Uri(url),
+					RequestUri = new Uri(uri),
 					Method = httpMethod
 				};
 
-				httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(options.ContentType);
-				httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(options.ContentType));
+				httpRequestMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(requestOptions.ContentType);
+				httpRequestMessage.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse(requestOptions.ContentType));
 
 				if (bearerToken.NotEmpty())
 				{
@@ -72,26 +83,22 @@ namespace EssentialLayers.Request.Helpers.Request
 
 				HttpResponseMessage? httpResponseMessage = null;
 
-				if (options.IsCached)
+				if (requestOptions.IsCached)
 				{
 					string key = request.Serialize();
 
 					httpResponseMessage = await CacheHelper<HttpResponseMessage>.HttpResponseMessage.GetOrCreate(
 						key, async () => await HttpClient.SendAsync(
-							httpRequestMessage, options.CancellationToken
+							httpRequestMessage, requestOptions.CancellationToken
 						)
 					);
 				}
 				else
 				{
 					httpResponseMessage = await HttpClient.SendAsync(
-						httpRequestMessage, options.CancellationToken
+						httpRequestMessage, requestOptions.CancellationToken
 					);
 				}
-
-				string response = await httpResponseMessage.Content.ReadAsStringAsync();
-
-				GlobalFunctions.Info(url, httpMethod.Method, response);
 
 				return httpResponseMessage;
 			}

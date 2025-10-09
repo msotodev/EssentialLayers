@@ -4,6 +4,7 @@ using EssentialLayers.Request.Helpers.Estension;
 using EssentialLayers.Request.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -128,6 +129,11 @@ namespace EssentialLayers.Request.Helpers.Http
 
 			foreach (KeyValuePair<string, string> header in options.Headers)
 			{
+				if (options.Headers.Any(h => h.Key == header.Key))
+				{
+					httpClient.DefaultRequestHeaders.Remove(header.Key);
+				}
+
 				httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
 			}
 		}

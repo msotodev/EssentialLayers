@@ -11,7 +11,7 @@ namespace EssentialLayers.Request.Services.Request
 
 		/**/
 
-		public async Task<HttpResponseMessage> DeleteAsync<TRequest>(
+		public async Task<HttpResponseMessage?> DeleteAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{
@@ -20,7 +20,7 @@ namespace EssentialLayers.Request.Services.Request
 			);
 		}
 
-		public async Task<HttpResponseMessage> GetAsync<TRequest>(
+		public async Task<HttpResponseMessage?> GetAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{
@@ -29,7 +29,7 @@ namespace EssentialLayers.Request.Services.Request
 			);
 		}
 
-		public async Task<HttpResponseMessage> PostAsync<TRequest>(
+		public async Task<HttpResponseMessage?> PostAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{
@@ -38,7 +38,7 @@ namespace EssentialLayers.Request.Services.Request
 			);
 		}
 
-		public async Task<HttpResponseMessage> PutAsync<TRequest>(
+		public async Task<HttpResponseMessage?> PutAsync<TRequest>(
 			TRequest request, string url, RequestOptions? options = null
 		)
 		{

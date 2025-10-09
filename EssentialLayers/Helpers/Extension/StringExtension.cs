@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,16 +9,20 @@ namespace EssentialLayers.Helpers.Extension
 {
 	public static class StringExtension
 	{
-		public static bool IsEmpty(this string self)
+		public static bool IsEmpty(this string self, bool includeWhiteSpaces = false)
 		{
 			if (self == null) return true;
+
+			if (includeWhiteSpaces) return string.IsNullOrWhiteSpace(self);
 
 			return string.IsNullOrEmpty(self);
 		}
 
-		public static bool NotEmpty(this string self)
+		public static bool NotEmpty(this string self, bool includeWhiteSpaces = false)
 		{
 			if (self == null) return false;
+
+			if (includeWhiteSpaces) return !string.IsNullOrWhiteSpace(self);
 
 			return !string.IsNullOrEmpty(self);
 		}
@@ -145,18 +150,21 @@ namespace EssentialLayers.Helpers.Extension
 
 		public static string RemoveDiacritics(this string self)
 		{
-			char[] replacement = ['a', 'a', 'e', 'e', 'i', 'i', 'n', 'o', 'o', 'A', 'E', 'I', 'O', 'U'];
-			char[] accents = ['à', 'á', 'é', 'è', 'ì', 'í', 'ñ', 'ò', 'ó', 'Á', 'É', 'Í', 'Ó', 'Ú'];
+			if (string.IsNullOrWhiteSpace(self)) return self;
 
-			if (self.NotEmpty())
+			string normalized = self.Normalize(NormalizationForm.FormD);
+
+			StringBuilder stringBuilder = new();
+
+			foreach (char character in normalized)
 			{
-				for (int i = 0; i < accents.Length; i++)
+				if (CharUnicodeInfo.GetUnicodeCategory(character) != UnicodeCategory.NonSpacingMark)
 				{
-					self = self.Replace(accents[i], replacement[i]);
+					stringBuilder.Append(character);
 				}
 			}
 
-			return self;
+			return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 		}
 
 		public static Stream ToStream(this string self)
@@ -166,6 +174,15 @@ namespace EssentialLayers.Helpers.Extension
 			byte[] bytes = Encoding.UTF8.GetBytes(self);
 
 			return new MemoryStream(bytes);
+		}
+
+		public static string ToBase64(this string self)
+		{
+			byte[] bytes = Encoding.UTF8.GetBytes(self);
+
+			string base64 = Convert.ToBase64String(bytes);
+
+			return base64;
 		}
 
 		public static T ConvertToType<T>(string value)
