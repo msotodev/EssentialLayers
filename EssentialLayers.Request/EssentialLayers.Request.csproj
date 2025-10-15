@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.4.2</Version>
+		<Version>1.4.4</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Request is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.</Description>
@@ -17,7 +17,8 @@
 		<RepositoryUrl>https://github.com/msotodev/EssentialLayers/tree/master/EssentialLayers.Request</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Request Http Delete Get Post Put</PackageTags>
-		<PackageReleaseNotes> - Updating of nuget packages EssentialLayers and Microsoft.Extensions.Http `27/08/2025`
+		<PackageReleaseNotes> - In the model HttpOption, must be add an extra property to send the headers since ConfigureRequest `09/10/2025`
+ - Updating of nuget packages EssentialLayers and Microsoft.Extensions.Http `27/08/2025`
  - Remove repeated headers `17-07-2025`
  - Now all methods of RequestService &amp; RequestHelper allows nullable results; It was fixed issue in uribase `21-05-2025`
  - New Delete method in HttpService only with url `16-04-2025`
@@ -44,7 +45,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="EssentialLayers" Version="1.6.5" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
 	</ItemGroup>
 
 	<ItemGroup>

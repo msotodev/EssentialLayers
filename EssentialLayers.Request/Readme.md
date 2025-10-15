@@ -41,6 +41,8 @@ yourService.SetOptions(
 ```
 
 #### Release Notes
+ - Updating of dependencies to the last version `14-10-2025`
+ - In the model HttpOption, must be add an extra property to send the headers since ConfigureRequest `09/10/2025`
  - Updating of nuget packages EssentialLayers and Microsoft.Extensions.Http `27/08/2025`
  - Remove repeated headers `17-07-2025`
  - Now all methods of RequestService & RequestHelper allows nullable results; It was fixed issue in uribase `21-05-2025`
