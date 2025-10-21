@@ -93,6 +93,13 @@ namespace EssentialLayers.Dapper.Helpers.Query
 				"The connection string wasn't initilized yet"
 			);
 
+			using (SqlConnection sqlConnection = new(ConnectionString))
+			{
+				int affected = sqlConnection.QueryFirst<int>("SELECT 1");
+
+				if (affected == 0) return ResultHelper<TResult>.Fail("Failed to connect to the database");
+			}
+
 			return ResultHelper<TResult>.Success(result);
 		}
 	}

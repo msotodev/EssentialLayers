@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EssentialLayers.Dapper.Extension;
+using EssentialLayers.Dapper.Helpers.Query;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
@@ -15,6 +16,8 @@ namespace EssentialLayers.Dapper.Helpers.Procedure
 	public class ProcedureHelper(string connectionString)
 	{
 		private readonly string ConnectionString = connectionString;
+
+		private readonly QueryHelper _queryHelper = new(connectionString);
 
 		/**/
 
@@ -421,6 +424,13 @@ namespace EssentialLayers.Dapper.Helpers.Procedure
 			if (isEmpty) return ResultHelper<TResult>.Fail(
 				"The connection string wasn't initilized yet"
 			);
+
+			using (SqlConnection sqlConnection = new(ConnectionString))
+			{
+				int affected = sqlConnection.QueryFirst<int>("SELECT 1");
+
+				if (affected == 0) return ResultHelper<TResult>.Fail("Failed to connect to the database");
+			}
 
 			return ResultHelper<TResult>.Success(result);
 		}
