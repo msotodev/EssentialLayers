@@ -68,6 +68,8 @@ app.Services.ConfigureFactory(configuration, "FirstApiClient");
 ```
 
 #### Release Notes
+ - "HttpFactoryOptions" configuration binded correctly `22-10-2025`
+ - It was solved "Unable to resolve service for type 'EssentialLayers.Request.Services.Factory.IFactoryTokenProvider" issue `21-10-2025`
  - New provider based in IHttpClientFactory implementation to send requests `21-10-2025`
  - Updating of dependencies to the last version `14-10-2025`
  - In the model HttpOption, must be add an extra property to send the headers since ConfigureRequest `09/10/2025`

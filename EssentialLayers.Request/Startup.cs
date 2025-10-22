@@ -67,11 +67,17 @@ namespace EssentialLayers.Request
 		//
 		// Returns:
 		//     Configuration to use IHttpFactory interface
-		public static IServiceCollection ConfigureFactory(
-			this IServiceCollection services, IConfiguration configuration, string clientName
+		public static ServiceCollection ConfigureFactory(
+			this ServiceCollection services, IConfiguration configuration, string clientName
 		)
 		{
 			IConfigurationSection options = configuration.GetSection($"HttpClients:{clientName}");
+
+			services.Configure<HttpFactoryOptions>(options);
+
+			if (clientName == null || clientName == string.Empty) throw new ArgumentNullException(
+				nameof(clientName)
+			);
 
 			if (clientName.NotEmpty())
 			{
@@ -92,7 +98,7 @@ namespace EssentialLayers.Request
 				);
 			}
 
-			services.AddScoped<IClientFactoryTokenProvider, ClientFactoryTokenProvider>();
+			services.AddScoped<IFactoryTokenProvider, FactoryTokenProvider>();
 			services.AddScoped<IHttpFactory, HttpFactory>();
 
 			return services;
