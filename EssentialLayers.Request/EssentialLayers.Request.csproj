@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.4.4</Version>
+		<Version>1.5.0</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Request is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.</Description>
@@ -17,7 +17,8 @@
 		<RepositoryUrl>https://github.com/msotodev/EssentialLayers/tree/master/EssentialLayers.Request</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Request Http Delete Get Post Put</PackageTags>
-		<PackageReleaseNotes> - Updating of dependencies to the last version `14-10-2025`
+		<PackageReleaseNotes> - New provider based in IHttpClientFactory implementation to send requests `21-10-2025`
+ - Updating of dependencies to the last version `14-10-2025`
  - In the model HttpOption, must be add an extra property to send the headers since ConfigureRequest `09/10/2025`
  - Updating of nuget packages EssentialLayers and Microsoft.Extensions.Http `27/08/2025`
  - Remove repeated headers `17-07-2025`

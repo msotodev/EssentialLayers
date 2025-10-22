@@ -1,4 +1,4 @@
-# Essential Layers
+﻿# Essential Layers
 ### EssentialLayers.Request
 
 Is a complement to the package [EssentialLayers](/EssentialLayers/Readme.md) to provide an extra layer for using http requests in an easy way.
@@ -40,7 +40,35 @@ yourService.SetOptions(
 );
 ```
 
+## 🚀 New Feature: IHttpFactory
+
+IHttpFactory is the new provider to send request toward multiple apis.
+
+To start to use, add the next section in your appsettings.json
+
+```
+"HttpClients": {
+	"FirstApiClient": {
+		"ClientName": "FirstApiClient",
+		"BaseAddress": "https://localhost:5000/api/",
+		"UserAgent": "FirstApiClient/1.0"
+	}
+	"SecondApiClient": {
+		"ClientName": "SecondApiClient",
+		"BaseAddress": "https://localhost:5001/api/",
+		"UserAgent": "SecondApiClient/1.0"
+	}
+}
+```
+
+And in your **Program.cs** file
+
+```
+app.Services.ConfigureFactory(configuration, "FirstApiClient");
+```
+
 #### Release Notes
+ - New provider based in IHttpClientFactory implementation to send requests `21-10-2025`
  - Updating of dependencies to the last version `14-10-2025`
  - In the model HttpOption, must be add an extra property to send the headers since ConfigureRequest `09/10/2025`
  - Updating of nuget packages EssentialLayers and Microsoft.Extensions.Http `27/08/2025`
