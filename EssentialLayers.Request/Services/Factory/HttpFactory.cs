@@ -18,7 +18,12 @@ namespace EssentialLayers.Request.Services.Factory
 		IFactoryTokenProvider tokenProvider
 	) : IHttpFactory
 	{
-		private readonly HttpClient httpClient = httpClientFactory.CreateClient(factoryOptions.Value.ClientName);
+		private HttpClient? httpClient;
+
+		public void Init(string clientName)
+		{
+			httpClient = httpClientFactory.CreateClient(clientName);
+		}
 
 		public async Task<ResultHelper<TResult>> GetAsync<TResult>(string url)
 		{

@@ -1,12 +1,10 @@
-﻿using EssentialLayers.Helpers.Extension;
-using EssentialLayers.Request.Models;
+﻿using EssentialLayers.Request.Models;
 using EssentialLayers.Request.Services.Factory;
 using EssentialLayers.Request.Services.Http;
 using EssentialLayers.Request.Services.Request;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using System;
 using System.Net.Http.Headers;
 
@@ -45,13 +43,15 @@ namespace EssentialLayers.Request
 		//     "HttpClients": {
 		//			"FirstApiClient": {
 		//				"ClientName": "FirstApiClient",
-		//				"BaseAddress": "https://localhost:5000/api/",
-		//				"UserAgent": "FirstApiClient/1.0"
+		//				"BaseUrl": "https://localhost:5000/api/",
+		//				"UserAgent": "FirstApiClient/1.0", (Optional) => Default 'MyApp/1.0'
+		//				"ContentType": "application/json" (Optional) => Default 'application/json'
 		//			}
 		//			"SecondApiClient": {
 		//				"ClientName": "SecondApiClient",
-		//				"BaseAddress": "https://localhost:5001/api/",
-		//				"UserAgent": "SecondApiClient/1.0"
+		//				"BaseUrl": "https://localhost:5001/api/",
+		//				"UserAgent": "SecondApiClient/1.0", (Optional) => Default 'MyApp/1.0'
+		//				"ContentType": "application/json" (Optional) => Default 'application/json'
 		//			}
 		//		}
 		//
@@ -62,40 +62,38 @@ namespace EssentialLayers.Request
 		//   configuration:
 		//     The Configuration object.
 		//
-		//   clientName:
-		//     The logical name of the client to create
-		//
 		// Returns:
 		//     Configuration to use IHttpFactory interface
 		public static ServiceCollection ConfigureFactory(
-			this ServiceCollection services, IConfiguration configuration, string clientName
+			this ServiceCollection services, IConfiguration configuration
 		)
 		{
-			IConfigurationSection options = configuration.GetSection($"HttpClients:{clientName}");
+			IConfigurationSection clients = configuration.GetSection($"HttpClients");
 
-			services.Configure<HttpFactoryOptions>(options);
-
-			if (clientName == null || clientName == string.Empty) throw new ArgumentNullException(
-				nameof(clientName)
-			);
-
-			if (clientName.NotEmpty())
+			foreach (IConfigurationSection section in clients.GetChildren())
 			{
-				services.AddHttpClient(
-					clientName, (serviceProvider, client) =>
-					{
-						IOptions<HttpFactoryOptions>? factoryOptions = serviceProvider.GetService<IOptions<HttpFactoryOptions>>();
+				string? clientName = section["ClientName"];
 
-						if (factoryOptions != null && factoryOptions.Value != null)
+				if (clientName == null) continue;
+
+				string? baseUrl = section["BaseUrl"];
+				string? userAgent = section["UserAgent"];
+				string? contentType = section["ContentType"];
+
+				userAgent ??= "MyApp/1.0";
+				contentType ??= "application/json";
+
+				if (baseUrl != null)
+				{
+					services.AddHttpClient(
+						clientName, (client) =>
 						{
-							client.BaseAddress = new Uri(factoryOptions.Value.BaseAddress);
-							client.DefaultRequestHeaders.UserAgent.ParseAdd(factoryOptions.Value.UserAgent);
-							client.DefaultRequestHeaders.Accept.Add(
-								new MediaTypeWithQualityHeaderValue(factoryOptions.Value.DefaultContentType)
-							);
+							client.BaseAddress = new Uri(baseUrl);
+							client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+							client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
 						}
-					}
-				);
+					);
+				}
 			}
 
 			services.AddScoped<IFactoryTokenProvider, FactoryTokenProvider>();

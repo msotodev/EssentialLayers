@@ -50,13 +50,15 @@ To start to use, add the next section in your appsettings.json
 "HttpClients": {
 	"FirstApiClient": {
 		"ClientName": "FirstApiClient",
-		"BaseAddress": "https://localhost:5000/api/",
-		"UserAgent": "FirstApiClient/1.0"
+		"BaseUrl": "https://localhost:5000/api/",
+		"UserAgent": "FirstApiClient/1.0", (Optional) => Default 'MyApp/1.0'
+		"ContentType": "application/json" (Optional) => Default 'application/json'
 	}
 	"SecondApiClient": {
 		"ClientName": "SecondApiClient",
-		"BaseAddress": "https://localhost:5001/api/",
-		"UserAgent": "SecondApiClient/1.0"
+		"BaseUrl": "https://localhost:5001/api/",
+		"UserAgent": "SecondApiClient/1.0", (Optional) => Default 'MyApp/1.0'
+		"ContentType": "application/json" (Optional) => Default 'application/json'
 	}
 }
 ```
@@ -64,10 +66,11 @@ To start to use, add the next section in your appsettings.json
 And in your **Program.cs** file
 
 ```
-app.Services.ConfigureFactory(configuration, "FirstApiClient");
+app.Services.ConfigureFactory(configuration);
 ```
 
 #### Release Notes
+ - Read multiple http clients from the appsettings.json `22-10-2025`
  - "HttpFactoryOptions" configuration binded correctly `22-10-2025`
  - It was solved "Unable to resolve service for type 'EssentialLayers.Request.Services.Factory.IFactoryTokenProvider" issue `21-10-2025`
  - New provider based in IHttpClientFactory implementation to send requests `21-10-2025`
