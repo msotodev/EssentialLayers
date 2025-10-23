@@ -1,9 +1,9 @@
 ﻿using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,14 +13,13 @@ namespace EssentialLayers.Request.Services.Factory
 {
 	internal class HttpFactory(
 		IHttpClientFactory httpClientFactory,
-		IOptions<HttpFactoryOptions> factoryOptions,
 		ILogger<HttpFactory> logger,
 		IFactoryTokenProvider tokenProvider
 	) : IHttpFactory
 	{
 		private HttpClient? httpClient;
 
-		public void Init(string clientName)
+		public void Set(string clientName)
 		{
 			httpClient = httpClientFactory.CreateClient(clientName);
 		}
@@ -216,6 +215,13 @@ namespace EssentialLayers.Request.Services.Factory
 			return ResultHelper<TResult>.Success(deserialized);
 		}
 
-		private StringContent GetContent(string json) => new(json, Encoding.UTF8, factoryOptions.Value.DefaultContentType);
+		private StringContent GetContent(string json) => new(json, Encoding.UTF8, GetDefaultContentType());
+
+		public string GetDefaultContentType()
+		{
+			string? mediaType = httpClient?.DefaultRequestHeaders?.Accept?.FirstOrDefault()?.MediaType;
+
+			return mediaType ?? "application/json";
+		}
 	}
 }

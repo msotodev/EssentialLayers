@@ -72,7 +72,7 @@ namespace EssentialLayers.Request
 
 			foreach (IConfigurationSection section in clients.GetChildren())
 			{
-				string? clientName = section["ClientName"];
+				string? clientName = section.Key;
 
 				if (clientName == null) continue;
 

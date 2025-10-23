@@ -44,18 +44,16 @@ yourService.SetOptions(
 
 IHttpFactory is the new provider to send request toward multiple apis.
 
-To start to use, add the next section in your appsettings.json
+To start to use, add the next section in your  **appsettings.json**
 
 ```
 "HttpClients": {
 	"FirstApiClient": {
-		"ClientName": "FirstApiClient",
 		"BaseUrl": "https://localhost:5000/api/",
 		"UserAgent": "FirstApiClient/1.0", (Optional) => Default 'MyApp/1.0'
 		"ContentType": "application/json" (Optional) => Default 'application/json'
 	}
 	"SecondApiClient": {
-		"ClientName": "SecondApiClient",
 		"BaseUrl": "https://localhost:5001/api/",
 		"UserAgent": "SecondApiClient/1.0", (Optional) => Default 'MyApp/1.0'
 		"ContentType": "application/json" (Optional) => Default 'application/json'
@@ -63,13 +61,43 @@ To start to use, add the next section in your appsettings.json
 }
 ```
 
-And in your **Program.cs** file
+In your **Program.cs** file
 
 ```
 app.Services.ConfigureFactory(configuration);
 ```
 
+And in your specific **service.cs** file
+
+```
+public class AuthService
+	{
+		private readonly IHttpFactory _httpFactory;
+
+		public AuthService(IHttpFactory httpFactory)
+		{
+			httpFactory.Set("FirstApiClient");
+
+			_httpFactory = httpFactory;
+		}
+
+		public Task<ResultHelper<LoginResponseDto>> LoginAsync(string userName, string password)
+		{
+			return _httpFactory.PostAsync<LoginResponseDto, LoginRequestDto>(
+				"Auth/Login", new LoginRequestDto(userName, password)
+			);
+		}
+	}
+
+	public record LoginRequestDto(string UserName, string Password);
+
+	public record LoginResponseDto(UserDto? User, string Token);
+
+	public record UserDto(string Id, string Email, string Name, string PhoneNumber);
+```
+
 #### Release Notes
+ - Now instead of clienName the key will be taking as a clientName `22-10-2025`
  - Read multiple http clients from the appsettings.json `22-10-2025`
  - "HttpFactoryOptions" configuration binded correctly `22-10-2025`
  - It was solved "Unable to resolve service for type 'EssentialLayers.Request.Services.Factory.IFactoryTokenProvider" issue `21-10-2025`

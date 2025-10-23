@@ -6,7 +6,7 @@ namespace EssentialLayers.Request.Services.Factory
 {
 	public interface IHttpFactory
 	{
-		void Init(string clientName);
+		void Set(string clientName);
 
 		Task<ResultHelper<TResult>> GetAsync<TResult>(string url);
 
