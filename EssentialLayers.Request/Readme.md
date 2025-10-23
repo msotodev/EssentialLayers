@@ -97,6 +97,7 @@ public class AuthService
 ```
 
 #### Release Notes
+ - The response from all methods has changed from ResultHelper<T> to HttpResponse<T> to keep compatibility `23-10-2025`
  - Now instead of clienName the key will be taking as a clientName `22-10-2025`
  - Read multiple http clients from the appsettings.json `22-10-2025`
  - "HttpFactoryOptions" configuration binded correctly `22-10-2025`

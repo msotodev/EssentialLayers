@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.5.4</Version>
+		<Version>1.5.5</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Request is a complement to the package `EssentialLayers` to provide an extra layer for using http requests in an easy way.</Description>
@@ -17,7 +17,8 @@
 		<RepositoryUrl>https://github.com/msotodev/EssentialLayers/tree/master/EssentialLayers.Request</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Request Http Delete Get Post Put</PackageTags>
-		<PackageReleaseNotes> - Now instead of clienName the key will be taking as a clientName `22-10-2025`
+		<PackageReleaseNotes> - The response from all methods has changed from ResultHelper&lt;T&gt; to HttpResponse&lt;T&gt; to keep compatibility `23-10-2025`
+ - Now instead of clienName the key will be taking as a clientName `22-10-2025`
  - Read multiple http clients from the appsettings.json `22-10-2025`
  - "HttpFactoryOptions" configuration binded correctly `22-10-2025`
  - It was solved "Unable to resolve service for type 'EssentialLayers.Request.Services.Factory.IFactoryTokenProvider" issue `21-10-2025`

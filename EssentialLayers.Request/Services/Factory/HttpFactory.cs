@@ -1,9 +1,11 @@
 ﻿using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
+using EssentialLayers.Request.Helpers;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -24,7 +26,7 @@ namespace EssentialLayers.Request.Services.Factory
 			httpClient = httpClientFactory.CreateClient(clientName);
 		}
 
-		public async Task<ResultHelper<TResult>> GetAsync<TResult>(string url)
+		public async Task<HttpResponse<TResult>> GetAsync<TResult>(string url)
 		{
 			try
 			{
@@ -40,11 +42,11 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 			catch (Exception e)
 			{
-				return ResultHelper<TResult>.Fail(e);
+				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
 			}
 		}
 
-		public async Task<ResultHelper<Stream>> GetStreamAsync(string url)
+		public async Task<HttpResponse<Stream>> GetStreamAsync(string url)
 		{
 			try
 			{
@@ -58,15 +60,15 @@ namespace EssentialLayers.Request.Services.Factory
 
 				InfoResult(url, $"Size: {result.Length}");
 
-				return ResultHelper<Stream>.Success(result);
+				return HttpResponse<Stream>.Success(result, HttpStatusCode.OK);
 			}
 			catch (Exception e)
 			{
-				return ResultHelper<Stream>.Fail(e);
+				return HttpResponse<Stream>.Fail(e, HttpStatusCode.InternalServerError);
 			}
 		}
 
-		public async Task<ResultHelper<byte[]>> GetBytesAsync(string url)
+		public async Task<HttpResponse<byte[]>> GetBytesAsync(string url)
 		{
 			try
 			{
@@ -80,15 +82,15 @@ namespace EssentialLayers.Request.Services.Factory
 
 				InfoResult(url, $"Size: {result.Length}");
 
-				return ResultHelper<byte[]>.Success(result);
+				return HttpResponse<byte[]>.Success(result, HttpStatusCode.OK);
 			}
 			catch (Exception e)
 			{
-				return ResultHelper<byte[]>.Fail(e);
+				return HttpResponse<byte[]>.Fail(e, HttpStatusCode.InternalServerError);
 			}
 		}
 
-		public async Task<ResultHelper<TResult>> PostAsync<TResult, TRequest>(string url, TRequest request)
+		public async Task<HttpResponse<TResult>> PostAsync<TResult, TRequest>(string url, TRequest request)
 		{
 			try
 			{
@@ -106,11 +108,11 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 			catch (Exception e)
 			{
-				return ResultHelper<TResult>.Fail(e);
+				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
 			}
 		}
 
-		public async Task<ResultHelper<TResult>> PutAsync<TResult, TRequest>(string url, TRequest request)
+		public async Task<HttpResponse<TResult>> PutAsync<TResult, TRequest>(string url, TRequest request)
 		{
 			try
 			{
@@ -128,11 +130,11 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 			catch (Exception e)
 			{
-				return ResultHelper<TResult>.Fail(e);
+				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
 			}
 		}
 
-		public async Task<ResultHelper<TResult>> DeleteAsync<TResult>(string url)
+		public async Task<HttpResponse<TResult>> DeleteAsync<TResult>(string url)
 		{
 			try
 			{
@@ -148,7 +150,7 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 			catch (Exception e)
 			{
-				return ResultHelper<TResult>.Fail(e);
+				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
 			}
 		}
 
@@ -191,7 +193,7 @@ namespace EssentialLayers.Request.Services.Factory
 			Console.WriteLine($"[ Url: {fullUrl} - Request: {result} ]");
 		}
 
-		private async Task<ResultHelper<TResult>> ManageResponse<TResult>(
+		private async Task<HttpResponse<TResult>> ManageResponse<TResult>(
 			string url, HttpResponseMessage result
 		)
 		{
@@ -203,7 +205,7 @@ namespace EssentialLayers.Request.Services.Factory
 					"BadRequest: {status} - {message}", result.StatusCode, errorMessage
 				);
 
-				return ResultHelper<TResult>.Fail($"[{result.StatusCode}] {errorMessage}");
+				return HttpResponse<TResult>.Fail($"[{result.StatusCode}] {errorMessage}", result.StatusCode);
 			}
 
 			string stringResult = await result.Content.ReadAsStringAsync();
@@ -212,7 +214,7 @@ namespace EssentialLayers.Request.Services.Factory
 
 			TResult? deserialized = stringResult.Deserialize<TResult>();
 
-			return ResultHelper<TResult>.Success(deserialized);
+			return HttpResponse<TResult>.Success(deserialized, HttpStatusCode.OK);
 		}
 
 		private StringContent GetContent(string json) => new(json, Encoding.UTF8, GetDefaultContentType());
