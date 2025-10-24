@@ -12,6 +12,8 @@ namespace EssentialLayers.Request.Helpers.Extension
 			this IServiceCollection services, IConfiguration configuration
 		)
 		{
+			services.AddTransient<AuthHeaderHandler>();
+
 			IConfigurationSection clients = configuration.GetSection($"HttpClients");
 
 			foreach (IConfigurationSection section in clients.GetChildren())

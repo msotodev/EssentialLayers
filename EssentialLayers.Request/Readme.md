@@ -48,7 +48,7 @@ To start to use, add the next section in your  **appsettings.json**
 
 ```
 "HttpClients": {
-	"FirstApiClient": {
+	"AuthApi": {
 		"BaseUrl": "https://localhost:5000/api/",
 		"UserAgent": "FirstApiClient/1.0", (Optional) => Default 'MyApp/1.0'
 		"ContentType": "application/json" (Optional) => Default 'application/json'
@@ -65,6 +65,34 @@ In your **Program.cs** file
 
 ```
 builder.Services.AddHttpClients(builder.Configuration);
+builder.Services.ConfigureFactory();
+```
+
+OR
+
+In your **Program.cs** file
+
+```
+services.AddTransient<AuthHeaderHandler>();
+
+services.AddHttpClient(
+	clientName, (client) =>
+	{
+		client.BaseAddress = new Uri("https://localhost:5000/api/");
+		client.DefaultRequestHeaders.UserAgent.ParseAdd("AuthApi/1.0");
+		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+	}
+).AddHttpMessageHandler<AuthHeaderHandler>();
+
+services.AddHttpClient(
+	clientName, (client) =>
+	{
+		client.BaseAddress = new Uri("https://localhost:5001/api/");
+		client.DefaultRequestHeaders.UserAgent.ParseAdd("SecondApiClient/1.0");
+		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+	}
+).AddHttpMessageHandler<AuthHeaderHandler>();
+
 builder.Services.ConfigureFactory();
 ```
 
