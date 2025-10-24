@@ -6,18 +6,16 @@ namespace EssentialLayers.Request.Services.Factory
 {
 	public interface IHttpFactory
 	{
-		void Set(string clientName);
+		Task<HttpResponse<TResult>> GetAsync<TResult>(string clientName, string url);
 
-		Task<HttpResponse<TResult>> GetAsync<TResult>(string url);
+		Task<HttpResponse<Stream>> GetStreamAsync(string clientName, string url);
 
-		Task<HttpResponse<Stream>> GetStreamAsync(string url);
+		Task<HttpResponse<byte[]>> GetBytesAsync(string clientName, string url);
 
-		Task<HttpResponse<byte[]>> GetBytesAsync(string url);
+		Task<HttpResponse<TResult>> PostAsync<TResult, TRequest>(string clientName, string url, TRequest request);
 
-		Task<HttpResponse<TResult>> PostAsync<TResult, TRequest>(string url, TRequest request);
+		Task<HttpResponse<TResult>> PutAsync<TResult, TRequest>(string clientName, string url, TRequest request);
 
-		Task<HttpResponse<TResult>> PutAsync<TResult, TRequest>(string url, TRequest request);
-
-		Task<HttpResponse<TResult>> DeleteAsync<TResult>(string url);
+		Task<HttpResponse<TResult>> DeleteAsync<TResult>(string clientName, string url);
 	}
 }

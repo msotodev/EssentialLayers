@@ -1,5 +1,4 @@
 ﻿using EssentialLayers.Helpers.Extension;
-using EssentialLayers.Helpers.Result;
 using EssentialLayers.Request.Helpers;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,26 +18,23 @@ namespace EssentialLayers.Request.Services.Factory
 		IFactoryTokenProvider tokenProvider
 	) : IHttpFactory
 	{
-		private HttpClient? httpClient;
-
-		public void Set(string clientName)
-		{
-			httpClient = httpClientFactory.CreateClient(clientName);
-		}
-
-		public async Task<HttpResponse<TResult>> GetAsync<TResult>(string url)
+		public async Task<HttpResponse<TResult>> GetAsync<TResult>(string clientName, string url)
 		{
 			try
 			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
 				if (httpClient == null) throw new(nameof(httpClient));
 
-				InfoRequest(url, string.Empty);
+				string absoluteUri = httpClient.BaseAddress?.AbsoluteUri ?? string.Empty;
 
-				AddBearerAuth();
+				InfoRequest(absoluteUri, url, string.Empty);
+
+				AddAuth(httpClient);
 
 				HttpResponseMessage result = await httpClient.GetAsync(url);
 
-				return await ManageResponse<TResult>(url, result);
+				return await ManageResponse<TResult>(absoluteUri, url, result);
 			}
 			catch (Exception e)
 			{
@@ -46,19 +42,23 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 		}
 
-		public async Task<HttpResponse<Stream>> GetStreamAsync(string url)
+		public async Task<HttpResponse<Stream>> GetStreamAsync(string clientName, string url)
 		{
 			try
 			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
 				if (httpClient == null) throw new(nameof(httpClient));
 
-				InfoRequest(url, string.Empty);
+				string absoluteUri = httpClient.BaseAddress?.AbsoluteUri ?? string.Empty;
 
-				AddBearerAuth();
+				InfoRequest(absoluteUri, url, string.Empty);
+
+				AddAuth(httpClient);
 
 				Stream result = await httpClient.GetStreamAsync(url);
 
-				InfoResult(url, $"Size: {result.Length}");
+				InfoResult(absoluteUri, url, $"Size: {result.Length}");
 
 				return HttpResponse<Stream>.Success(result, HttpStatusCode.OK);
 			}
@@ -68,19 +68,23 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 		}
 
-		public async Task<HttpResponse<byte[]>> GetBytesAsync(string url)
+		public async Task<HttpResponse<byte[]>> GetBytesAsync(string clientName, string url)
 		{
 			try
 			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
 				if (httpClient == null) throw new(nameof(httpClient));
 
-				InfoRequest(url, string.Empty);
+				string absoluteUri = httpClient.BaseAddress?.AbsoluteUri ?? string.Empty;
 
-				AddBearerAuth();
+				InfoRequest(absoluteUri, url, string.Empty);
+
+				AddAuth(httpClient);
 
 				byte[] result = await httpClient.GetByteArrayAsync(url);
 
-				InfoResult(url, $"Size: {result.Length}");
+				InfoResult(absoluteUri, url, $"Size: {result.Length}");
 
 				return HttpResponse<byte[]>.Success(result, HttpStatusCode.OK);
 			}
@@ -90,21 +94,24 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 		}
 
-		public async Task<HttpResponse<TResult>> PostAsync<TResult, TRequest>(string url, TRequest request)
+		public async Task<HttpResponse<TResult>> PostAsync<TResult, TRequest>(string clientName, string url, TRequest request)
 		{
 			try
 			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
 				if (httpClient == null) throw new(nameof(httpClient));
 
+				string absoluteUri = httpClient.BaseAddress?.AbsoluteUri ?? string.Empty;
 				string serialized = request.Serialize();
 
-				InfoRequest(url, serialized);
+				InfoRequest(absoluteUri, url, serialized);
 
-				AddBearerAuth();
+				AddAuth(httpClient);
 
-				HttpResponseMessage result = await httpClient.PostAsync(url, GetContent(serialized));
+				HttpResponseMessage result = await httpClient.PostAsync(url, GetContent(httpClient, serialized));
 
-				return await ManageResponse<TResult>(url, result);
+				return await ManageResponse<TResult>(absoluteUri, url, result);
 			}
 			catch (Exception e)
 			{
@@ -112,21 +119,24 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 		}
 
-		public async Task<HttpResponse<TResult>> PutAsync<TResult, TRequest>(string url, TRequest request)
+		public async Task<HttpResponse<TResult>> PutAsync<TResult, TRequest>(string clientName, string url, TRequest request)
 		{
 			try
 			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
 				if (httpClient == null) throw new(nameof(httpClient));
 
+				string absoluteUri = httpClient.BaseAddress?.AbsoluteUri ?? string.Empty;
 				string serialized = request.Serialize();
 
-				InfoRequest(url, serialized);
+				InfoRequest(absoluteUri, url, serialized);
 
-				AddBearerAuth();
+				AddAuth(httpClient);
 
-				HttpResponseMessage result = await httpClient.PutAsync(url, GetContent(serialized));
+				HttpResponseMessage result = await httpClient.PutAsync(url, GetContent(httpClient, serialized));
 
-				return await ManageResponse<TResult>(url, result);
+				return await ManageResponse<TResult>(absoluteUri, url, result);
 			}
 			catch (Exception e)
 			{
@@ -134,19 +144,23 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 		}
 
-		public async Task<HttpResponse<TResult>> DeleteAsync<TResult>(string url)
+		public async Task<HttpResponse<TResult>> DeleteAsync<TResult>(string clientName, string url)
 		{
 			try
 			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
 				if (httpClient == null) throw new(nameof(httpClient));
 
-				InfoRequest(url, string.Empty);
+				string absoluteUri = httpClient.BaseAddress?.AbsoluteUri ?? string.Empty;
 
-				AddBearerAuth();
+				InfoRequest(absoluteUri, url, string.Empty);
+
+				AddAuth(httpClient);
 
 				HttpResponseMessage result = await httpClient.DeleteAsync(url);
 
-				return await ManageResponse<TResult>(url, result);
+				return await ManageResponse<TResult>(absoluteUri, url, result);
 			}
 			catch (Exception e)
 			{
@@ -154,47 +168,52 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 		}
 
-		private void AddBearerAuth()
+		private void AddAuth(HttpClient httpClient)
 		{
 			string token = tokenProvider.GetToken();
 
-			if (httpClient != null && token.NotEmpty())
+			if (token.NotEmpty())
 			{
 				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			}
+
+			string apiKey = tokenProvider.GetApiKey();
+
+			if (httpClient != null && apiKey.NotEmpty())
+			{
+				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ApiKey", apiKey);
+			}
+
+			string headerApiKey = tokenProvider.GetHeaderApiKey();
+
+			if (httpClient != null && headerApiKey.NotEmpty())
+			{
+				httpClient.DefaultRequestHeaders.Add("X-Api-Key", headerApiKey);
+			}
 		}
 
-		private string GetFullUrl(string url)
-		{
-			if (httpClient != null && httpClient.BaseAddress != null) return $"{httpClient.BaseAddress.AbsoluteUri}{url}";
+		private static string GetFullUrl(string absoluteUri, string url) => $"{absoluteUri}{url}";
 
-			return string.Empty;
-		}
-
-		private void InfoRequest(string url, string request)
+		private void InfoRequest(string absoluteUri, string url, string request)
 		{
-			string fullUrl = GetFullUrl(url);
+			string fullUrl = GetFullUrl(absoluteUri, url);
 
 			logger.LogInformation(
 				"[ Url: {fullUrl} - Request: {request} ]", fullUrl, request
 			);
-
-			Console.WriteLine($"[ Url: {fullUrl} - Request: {request} ]");
 		}
 
-		private void InfoResult(string url, string result)
+		private void InfoResult(string absoluteUri, string url, string result)
 		{
-			string fullUrl = GetFullUrl(url);
+			string fullUrl = GetFullUrl(absoluteUri, url);
 
 			logger.LogInformation(
 				"[ Url: {fullUrl} - Result: {result} ]", fullUrl, result
 			);
-
-			Console.WriteLine($"[ Url: {fullUrl} - Request: {result} ]");
 		}
 
 		private async Task<HttpResponse<TResult>> ManageResponse<TResult>(
-			string url, HttpResponseMessage result
+			string absoluteUri, string url, HttpResponseMessage result
 		)
 		{
 			if (result.IsSuccessStatusCode.False())
@@ -210,20 +229,29 @@ namespace EssentialLayers.Request.Services.Factory
 
 			string stringResult = await result.Content.ReadAsStringAsync();
 
-			InfoResult(url, stringResult);
+			InfoResult(absoluteUri, url, stringResult);
 
 			TResult? deserialized = stringResult.Deserialize<TResult>();
 
 			return HttpResponse<TResult>.Success(deserialized, HttpStatusCode.OK);
 		}
 
-		private StringContent GetContent(string json) => new(json, Encoding.UTF8, GetDefaultContentType());
+		private static StringContent GetContent(
+			HttpClient httpClient, string json) => new(json, Encoding.UTF8, GetDefaultContentType(httpClient)
+		);
 
-		public string GetDefaultContentType()
+		private static string GetDefaultContentType(HttpClient httpClient)
 		{
 			string? mediaType = httpClient?.DefaultRequestHeaders?.Accept?.FirstOrDefault()?.MediaType;
 
 			return mediaType ?? "application/json";
+		}
+
+		private HttpClient GetHttpClient(string clientName)
+		{
+			HttpClient httpClient = httpClientFactory.CreateClient(clientName);
+
+			return httpClient;
 		}
 	}
 }

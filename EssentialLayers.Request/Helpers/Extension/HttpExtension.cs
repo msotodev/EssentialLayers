@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace EssentialLayers.Request.Helpers.Estension
+namespace EssentialLayers.Request.Helpers.Extension
 {
 	public static class HttpExtension
 	{

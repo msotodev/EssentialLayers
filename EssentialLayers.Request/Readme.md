@@ -64,27 +64,21 @@ To start to use, add the next section in your  **appsettings.json**
 In your **Program.cs** file
 
 ```
-app.Services.ConfigureFactory(configuration);
+builder.Services.AddHttpClients(builder.Configuration);
+builder.Services.ConfigureFactory();
 ```
 
 And in your specific **service.cs** file
 
 ```
-public class AuthService
+public class AuthService (IHttpFactory httpFactory)
 	{
-		private readonly IHttpFactory _httpFactory;
+		private const string CLIENT_NAME = "AuthApi";
 
-		public AuthService(IHttpFactory httpFactory)
+		public Task<HttpResponse<LoginResponseDto>> LoginAsync(string userName, string password)
 		{
-			httpFactory.Set("FirstApiClient");
-
-			_httpFactory = httpFactory;
-		}
-
-		public Task<ResultHelper<LoginResponseDto>> LoginAsync(string userName, string password)
-		{
-			return _httpFactory.PostAsync<LoginResponseDto, LoginRequestDto>(
-				"Auth/Login", new LoginRequestDto(userName, password)
+			return httpFactory.PostAsync<LoginResponseDto, LoginRequestDto>(
+				CLIENT_NAME, "User/Login", new LoginRequestDto(userName, password)
 			);
 		}
 	}
@@ -97,6 +91,7 @@ public class AuthService
 ```
 
 #### Release Notes
+ - Implemented the IHttpFactory as a stateless, passing as parameter the clientName `24-10-2025`
  - The response from all methods has changed from ResultHelper<T> to HttpResponse<T> to keep compatibility `23-10-2025`
  - Now instead of clienName the key will be taking as a clientName `22-10-2025`
  - Read multiple http clients from the appsettings.json `22-10-2025`
