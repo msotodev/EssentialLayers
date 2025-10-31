@@ -48,7 +48,7 @@ namespace EssentialLayers.Request
 			this IServiceCollection services
 		)
 		{
-			services.AddScoped<IFactoryTokenProvider, FactoryTokenProvider>();
+			services.AddSingleton<IFactoryTokenProvider, FactoryTokenProvider>();
 			services.AddTransient<IHttpFactory, HttpFactory>();
 
 			return services;
