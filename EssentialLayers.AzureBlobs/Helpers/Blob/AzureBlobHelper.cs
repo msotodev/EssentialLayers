@@ -75,7 +75,7 @@ namespace EssentialLayers.AzureBlobs.Helpers.Blob
 			}
 		}
 
-		public async Task<ResultHelper<string>> DowloadFileAsync(
+		public async Task<ResultHelper<string>> DownloadFileAsync(
 			string filepath, string container
 		)
 		{
@@ -104,7 +104,7 @@ namespace EssentialLayers.AzureBlobs.Helpers.Blob
 			}
 		}
 
-		public async Task<ResultHelper<byte[]>> DowloadBytesAsync(
+		public async Task<ResultHelper<byte[]>> DownloadBytesAsync(
 			string filepath, string container
 		)
 		{

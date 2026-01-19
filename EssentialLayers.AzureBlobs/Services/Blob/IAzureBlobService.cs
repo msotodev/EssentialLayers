@@ -15,11 +15,11 @@ public interface IAzureBlobService
 		string filepath, string container
 	);
 
-	Task<ResultHelper<string>> DowloadFileAsync(
+	Task<ResultHelper<string>> DownloadFileAsync(
 		string filepath, string container
 	);
 
-	Task<ResultHelper<byte[]>> DowloadBytesAsync(
+	Task<ResultHelper<byte[]>> DownloadBytesAsync(
 		string filepath, string container
 	);
 

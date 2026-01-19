@@ -32,18 +32,18 @@ namespace EssentialLayers.AzureBlobs.Services.Blob
 			return azureBlobHelper.GetUrlFile(filepath, container);
 		}
 
-		public async Task<ResultHelper<string>> DowloadFileAsync(
+		public async Task<ResultHelper<string>> DownloadFileAsync(
 			string filepath, string container
 		)
 		{
-			return await azureBlobHelper.DowloadFileAsync(filepath, container);
+			return await azureBlobHelper.DownloadFileAsync(filepath, container);
 		}
 
-		public async Task<ResultHelper<byte[]>> DowloadBytesAsync(
+		public async Task<ResultHelper<byte[]>> DownloadBytesAsync(
 			string filepath, string container
 		)
 		{
-			return await azureBlobHelper.DowloadBytesAsync(filepath, container);
+			return await azureBlobHelper.DownloadBytesAsync(filepath, container);
 		}
 
 		public async Task<ResultHelper<bool>> DeleteFileAsync(
