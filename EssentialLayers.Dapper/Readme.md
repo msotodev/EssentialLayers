@@ -19,6 +19,7 @@ app.Services.ConfigureDapper(Connection_String);
 ```
 
 #### Release Notes
+ - Refactor Dapper helpers for DI and connection validation `19/01/2026`
  - Health check implementation and updating of dependencies to the last version `21/10/2025`
  - Added SetConnection to set the runtime value `24/01/2025`
 

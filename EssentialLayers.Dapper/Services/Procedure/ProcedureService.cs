@@ -1,23 +1,14 @@
 ﻿using EssentialLayers.Dapper.Helpers;
-using EssentialLayers.Dapper.Helpers.Procedure;
+using EssentialLayers.Dapper.Services.Connection;
 using EssentialLayers.Helpers.Result;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Services.Procedure
 {
-	internal class ProcedureService : IProcedureService
+	internal class ProcedureService(IConnectionService connectionService) : IProcedureService
 	{
-		private ProcedureHelper _procedureHelper;
-
-		/**/
-
-		public ProcedureService()
-		{
-			string connectionString = Tools.Get.ConnectionService!.Get();
-
-			_procedureHelper = new ProcedureHelper(connectionString);
-		}
+		private ProcedureHelper _procedureHelper = new(connectionService.Get());
 
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure

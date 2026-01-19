@@ -1,60 +1,67 @@
 ﻿using EssentialLayers.Dapper.Helpers;
-using EssentialLayers.Dapper.Helpers.Query;
+using EssentialLayers.Dapper.Services.Connection;
 using EssentialLayers.Helpers.Result;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Services.Query
 {
-	internal class QueryService : IQueryService
+	internal class QueryService(
+		IConnectionService connectionService,
+		ILogger<QueryService> logger
+	) : IQueryService
 	{
-		private QueryHelper _queryHelper;
+		private QueryHelper _queryHelper = new(connectionService.Get());
 
-		/**/
-
-		public QueryService()
-		{
-			string connectionString = Tools.Get.ConnectionService!.Get();
-
-			_queryHelper = new QueryHelper(connectionString);
-		}
-
-		public ResultHelper<HashSet<ResultDto>> QueryAll<ResultDto>(string query, params object[] parameters)
+		public ResultHelper<HashSet<ResultDto>> QueryAll<ResultDto>(
+			string query, object? param = null
+		)
 		{
 			ResultHelper<HashSet<ResultDto>> result = _queryHelper.QueryAll<ResultDto>(
-				query, parameters
+				query, param
 			);
+
+			logger.LogInformation(query, param);
 
 			return result;
 		}
 
 		public async Task<ResultHelper<HashSet<ResultDto>>> QueryAllAsync<ResultDto>(
-			string query, params object[] parameters
+			string query, object? param = null
 		)
 		{
 			ResultHelper<HashSet<ResultDto>> result = await _queryHelper.QueryAllAsync<ResultDto>(
-				query, parameters
+				query, param
 			);
+
+			logger.LogInformation(query, param);
 
 			return result;
 		}
 
-		public ResultHelper<ResultDto> QueryFirst<ResultDto>(string query, params object[] parameters)
+		public ResultHelper<ResultDto> QueryFirst<ResultDto>(
+			string query, object? param = null
+		)
 		{
 			ResultHelper<ResultDto> result = _queryHelper.QueryFirst<ResultDto>(
-				query, parameters
+				query, param
 			);
+
+			logger.LogInformation(query, param);
 
 			return result;
 		}
 
 		public async Task<ResultHelper<ResultDto>> QueryFirstAsync<ResultDto>(
-			string query, params object[] parameters
+			string query, object? param = null
 		)
 		{
 			ResultHelper<ResultDto> result = await _queryHelper.QueryFirstAsync<ResultDto>(
-				query, parameters
+				query, param
 			);
+
+			logger.LogInformation(query, param);
 
 			return result;
 		}
