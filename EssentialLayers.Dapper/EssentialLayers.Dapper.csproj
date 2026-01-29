@@ -4,7 +4,7 @@
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.2.0</Version>
+		<Version>1.3.0</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Dapper is a complement to the package EssentialLayers to offer an extra layer with the ORM dapper in an easy way, where the main purpose will be, write the business logic in the "stored procedures" using templates that receiving input parameters and return a result set, Currently is just compatible with SQL Server.</Description>
@@ -15,7 +15,10 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Dapper Database MicroORM Helpers</PackageTags>
-		<PackageReleaseNotes> - Health check implementation and updating of dependencies to the last version `21/10/2025`
+		<PackageReleaseNotes> - The IConnectionString service was removed to allowing the developer configure options, before to call UseDapper function `28/01/2026`
+ - Segregation of dependecy IProcedureService in IComplexProcedure, INormalProcedure and IMultipleProcedure `28/01/2026`
+ - Refactor Dapper helpers for DI and connection validation `19/01/2026`
+ - Health check implementation and updating of dependencies to the last version `21/10/2025`
  - Added SetConnection to set the runtime value `24/01/2025`</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
@@ -28,7 +31,7 @@
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.1.66" />
 		<PackageReference Include="EssentialLayers" Version="1.6.6" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
 	</ItemGroup>
 
 	<ItemGroup>

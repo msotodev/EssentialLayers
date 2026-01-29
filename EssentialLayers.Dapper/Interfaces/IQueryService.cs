@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace EssentialLayers.Dapper.Services.Query
+namespace EssentialLayers.Dapper.Interfaces
 {
 	public interface IQueryService
 	{
