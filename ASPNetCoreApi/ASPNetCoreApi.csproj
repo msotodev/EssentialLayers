@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\EssentialLayers.Dapper\EssentialLayers.Dapper.csproj" />
     <ProjectReference Include="..\EssentialLayers\EssentialLayers.csproj" />
   </ItemGroup>
 
