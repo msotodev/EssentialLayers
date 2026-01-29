@@ -7,19 +7,19 @@ namespace EssentialLayers.Dapper.Services.Query
 	public interface IQueryService
 	{
 		ResultHelper<HashSet<ResultDto>> QueryAll<ResultDto>(
-			string query, params object[] parameters
+			string query, object? param = null
 		);
 
 		Task<ResultHelper<HashSet<ResultDto>>> QueryAllAsync<ResultDto>(
-			string query, params object[] parameters
+			string query, object? param = null
 		);
 
 		ResultHelper<ResultDto> QueryFirst<ResultDto>(
-			string query, params object[] parameters
+			string query, object? param = null
 		);
 
 		Task<ResultHelper<ResultDto>> QueryFirstAsync<ResultDto>(
-			string query, params object[] parameters
+			string query, object? param = null
 		);
 	}
 }

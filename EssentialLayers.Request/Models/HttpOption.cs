@@ -1,4 +1,5 @@
-﻿using static EssentialLayers.Request.Helpers.Types.HttpTypes;
+﻿using System.Collections.Generic;
+using static EssentialLayers.Request.Helpers.Types.HttpTypes;
 
 namespace EssentialLayers.Request.Models
 {
@@ -16,6 +17,8 @@ namespace EssentialLayers.Request.Models
 
 		public string BearerToken { get; set; } = string.Empty;
 
+		public Dictionary<string, string>? DefaultHeaders { get; set; }
+
 		/**/
 
 		public HttpOption()
@@ -25,6 +28,7 @@ namespace EssentialLayers.Request.Models
 			BaseUri = string.Empty;
 			ResultType = ResultType.Object;
 			InsensitiveMapping = true;
+			DefaultHeaders = null;
 		}
 
 		public HttpOption(string appName, string appVersion)

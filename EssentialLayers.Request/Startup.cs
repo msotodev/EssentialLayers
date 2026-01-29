@@ -1,4 +1,5 @@
 ﻿using EssentialLayers.Request.Models;
+using EssentialLayers.Request.Services.Factory;
 using EssentialLayers.Request.Services.Http;
 using EssentialLayers.Request.Services.Request;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,26 @@ namespace EssentialLayers.Request
 			requestService.SetOptions(httpOption);
 
 			return provider;
+		}
+
+		//
+		// Summary:
+		//     To use the service IHttpFactory
+		//
+		// Parameters:
+		//   services:
+		//     Service collection to which to add authentication.
+		//
+		// Returns:
+		//     Configuration to use IHttpFactory interface
+		public static IServiceCollection ConfigureFactory(
+			this IServiceCollection services
+		)
+		{
+			services.AddSingleton<IFactoryTokenProvider, FactoryTokenProvider>();
+			services.AddTransient<IHttpFactory, HttpFactory>();
+
+			return services;
 		}
 	}
 }

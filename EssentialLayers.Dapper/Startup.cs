@@ -1,5 +1,4 @@
-﻿using EssentialLayers.Dapper.Helpers;
-using EssentialLayers.Dapper.Services.Connection;
+﻿using EssentialLayers.Dapper.Services.Connection;
 using EssentialLayers.Dapper.Services.Procedure;
 using EssentialLayers.Dapper.Services.Query;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +13,9 @@ namespace EssentialLayers.Dapper
 			this IServiceCollection services
 		)
 		{
+			services.TryAddSingleton<IConnectionService, ConnectionService>();
 			services.TryAddScoped<IProcedureService, ProcedureService>();
 			services.TryAddScoped<IQueryService, QueryService>();
-			services.TryAddSingleton<IConnectionService, ConnectionService>();
 
 			return services;
 		}
@@ -26,8 +25,6 @@ namespace EssentialLayers.Dapper
 		)
 		{
 			IConnectionService service = provider.GetRequiredService<IConnectionService>();
-
-			Tools.Init(provider);
 
 			service.Set(connectionString);
 

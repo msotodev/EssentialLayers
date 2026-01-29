@@ -1,6 +1,6 @@
 ﻿using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
-using EssentialLayers.Request.Helpers.Estension;
+using EssentialLayers.Request.Helpers.Extension;
 using EssentialLayers.Request.Models;
 using System;
 using System.Collections.Generic;
@@ -39,7 +39,12 @@ namespace EssentialLayers.Request.Helpers.Http
 		{
 			try
 			{
-				options ??= new RequestOptions();
+				
+				options ??= new RequestOptions()
+				{
+					Headers = HttpOption.DefaultHeaders ?? []
+				};
+
 				bool insensitiveMapping = true;
 
 				AddHeaders(HttpClient, options);
@@ -210,6 +215,14 @@ namespace EssentialLayers.Request.Helpers.Http
 			HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
 				"Bearer", httpOption.BearerToken
 			);
+
+			if (httpOption.DefaultHeaders != null)
+			{
+				foreach (var header in httpOption.DefaultHeaders)
+				{
+					HttpClient.DefaultRequestHeaders.TryAddWithoutValidation(header.Key, header.Value);
+				}
+			}
 		}
 
 		private HttpResponse<TResult> Deserialize<TResult>(

@@ -14,6 +14,7 @@ It can be used for multiple projects in the **.NET** environment, that is, mobil
 | [Logger](/EssentialLayers/Helpers/Logger) | manage the essential methods at the app logger. |
 
 #### Release Notes
+ - Updating of dependencies to the last version `14-10-2025`
  - New ToBase64 extension in String extension `14/08/2025`
  - New Response design pattern to manage responses of methods and override to Success in ResultHelper `29/07/2025`
  - Better implementation of RemoveDiacritics; New parameter 'includeWhiteSpaces' in IsEmpty and NotEmpty in String extensions `21-05-2025`
