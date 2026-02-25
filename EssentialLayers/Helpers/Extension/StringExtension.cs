@@ -189,5 +189,10 @@ namespace EssentialLayers.Helpers.Extension
 		{
 			return (T)Convert.ChangeType(value, typeof(T));
 		}
+
+		public static byte[] GetBytes(this string self)
+		{
+			return Convert.FromBase64String(self);
+		}
 	}
 }
