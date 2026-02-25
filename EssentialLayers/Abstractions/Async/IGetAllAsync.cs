@@ -5,6 +5,6 @@ namespace EssentialLayers.Abstractions.Async
 {
 	public interface IGetAllAsync<T> where T : class
 	{
-		Task<List<T>> All { get; }
+		Task<IReadOnlyList<T>> GetAllAsync();
 	}
 }
