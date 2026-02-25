@@ -1,14 +1,14 @@
 ﻿namespace EssentialLayers.Helpers.Models
 {
-	public class OptionModel
+	public class IntOptionModel
 	{
 		public string Title { get; set; } = string.Empty;
 
-		public string Value { get; set; } = string.Empty;
+		public int Value { get; set; }
 
-		public OptionModel() { }
+		public IntOptionModel() { }
 
-		public OptionModel(string title, string value)
+		public IntOptionModel(string title, int value)
 		{
 			Title = title;
 			Value = value;
