@@ -14,6 +14,9 @@ It can be used for multiple projects in the **.NET** environment, that is, mobil
 | [Logger](/EssentialLayers/Helpers/Logger) | manage the essential methods at the app logger. |
 
 #### Release Notes
+ - feat: New GetBytes method in Extensions `25-02-2026`
+ - feat: New integer common option model `25-02-2026`
+ - feat: New sync and async abstractions about common methods `25-02-2026`
  - Updating of dependencies to the last version `14-10-2025`
  - New ToBase64 extension in String extension `14/08/2025`
  - New Response design pattern to manage responses of methods and override to Success in ResultHelper `29/07/2025`
