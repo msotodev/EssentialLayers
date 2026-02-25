@@ -13,9 +13,13 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.7.1</Version>
+		<Version>1.7.2</Version>
 		<Title>$(AssemblyName)</Title>
-		<PackageReleaseNotes> - refactor: improve collection return types in abstractions and bulk naming `25-02-2026`</PackageReleaseNotes>
+		<PackageReleaseNotes> - refactor: Null support, removing IsNull and NotNull extensions and the class LoggerHelper was removed `25-02-2026`
+ - refactor: improve collection return types in abstractions and bulk naming `25-02-2026`
+ - feat: New GetBytes method in Extensions `25-02-2026`
+ - feat: New integer common option model `25-02-2026`
+ - feat: New sync and async abstractions about common methods `25-02-2026`</PackageReleaseNotes>
 		<Authors>MSoto</Authors>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
