@@ -2,6 +2,6 @@
 {
 	public interface IGetById<T> where T : class
 	{
-		T GetById(int id);
+		T? GetById(int id);
 	}
 }

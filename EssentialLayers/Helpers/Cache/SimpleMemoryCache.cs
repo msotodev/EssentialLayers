@@ -1,5 +1,4 @@
-﻿using EssentialLayers.Helpers.Extension;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Threading.Tasks;
 
@@ -9,9 +8,9 @@ namespace EssentialLayers.Helpers.Cache
 	{
 		private readonly MemoryCache MemoryCache;
 
-		public SimpleMemoryCache(MemoryCacheOptions options = null)
+		public SimpleMemoryCache(MemoryCacheOptions? options = null)
 		{
-			if (options.IsNull())
+			if (options is null)
 			{
 				options = new MemoryCacheOptions
 				{
@@ -22,11 +21,11 @@ namespace EssentialLayers.Helpers.Cache
 			MemoryCache = new MemoryCache(options!);
 		}
 
-		public async Task<TItem> GetOrCreate(object key, Func<Task<TItem>> createItem)
+		public async Task<TItem?> GetOrCreate(object key, Func<Task<TItem>> createItem)
 		{
-			if (MemoryCache.TryGetValue(key, out TItem cacheEntry))
+			if (MemoryCache.TryGetValue(key, out TItem? cacheEntry))
 			{
-				return cacheEntry!;
+				return cacheEntry;
 			}
 
 			cacheEntry = await createItem();
@@ -36,11 +35,11 @@ namespace EssentialLayers.Helpers.Cache
 			return cacheEntry;
 		}
 
-		public TItem GetOrCreate(object key, TItem item)
+		public TItem? GetOrCreate(object key, TItem item)
 		{
-			if (MemoryCache.TryGetValue(key, out TItem cacheEntry))
+			if (MemoryCache.TryGetValue(key, out TItem? cacheEntry))
 			{
-				return cacheEntry!;
+				return cacheEntry;
 			}
 
 			cacheEntry = item;

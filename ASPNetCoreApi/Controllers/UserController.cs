@@ -1,5 +1,4 @@
 using Common.Dtos;
-using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,9 +6,9 @@ namespace ASPNetCoreApi.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class UserController(ILogger<UserController> logger) : ControllerBase
+	public class UserController : ControllerBase
 	{
-		private static readonly IList<UserResponseDto> Users = Enumerable.Range(1, 10).Select(
+		private static readonly IList<UserResponseDto> Users = [.. Enumerable.Range(1, 10).Select(
 			index => new UserResponseDto
 			{
 				Id = index,
@@ -17,7 +16,7 @@ namespace ASPNetCoreApi.Controllers
 				Age = Random.Shared.Next(18, 55),
 				UserName = $"Name{index}"
 			}
-		).ToList();
+		)];
 
 		[HttpGet("All")]
 		public IList<UserResponseDto> GetAll()
@@ -30,7 +29,7 @@ namespace ASPNetCoreApi.Controllers
 		{
 			UserResponseDto? first = Users.FirstOrDefault(user => user.Id == id);
 
-			if (first.IsNull()) return ResultHelper<UserResponseDto>.Fail("The user doesn't exists");
+			if (first is null) return ResultHelper<UserResponseDto>.Fail("The user doesn't exists");
 
 			return ResultHelper<UserResponseDto>.Success(first!);
 		}
@@ -40,7 +39,7 @@ namespace ASPNetCoreApi.Controllers
 		{
 			UserResponseDto? first = Users.FirstOrDefault(user => user.Id == id);
 
-			if (first.IsNull()) return string.Empty;
+			if (first is null) return string.Empty;
 
 			return first!.UserName;
 		}

@@ -4,13 +4,13 @@
 	{
 		public string Title { get; set; } = string.Empty;
 
-		public T Value { get; set; } = default;
+		public T? Value { get; set; } = default;
 
 		/**/
 
 		public TOptionModel() { }
 
-		public TOptionModel(string title, T value)
+		public TOptionModel(string title, T? value)
 		{
 			Title = title;
 			Value = value;

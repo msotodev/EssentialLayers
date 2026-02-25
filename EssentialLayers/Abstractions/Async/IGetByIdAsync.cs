@@ -4,6 +4,6 @@ namespace EssentialLayers.Abstractions.Async
 {
 	public interface IGetByIdAsync<T> where T : class
 	{
-		Task<T> GetByIdAsync(int id);
+		Task<T?> GetByIdAsync(int id);
 	}
 }

@@ -17,6 +17,7 @@
 		<Title>$(AssemblyName)</Title>
 		<PackageReleaseNotes> - refactor: improve collection return types in abstractions and bulk naming `25-02-2026`</PackageReleaseNotes>
 		<Authors>MSoto</Authors>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
