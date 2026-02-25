@@ -129,7 +129,7 @@ namespace EssentialLayers.Helpers.Extension
 
 			string value = self;
 
-			if (wrap && self.NotNull() && self.Length > n) value = self[..n] + "...";
+			if (wrap && self.NotEmpty() && self.Length > n) value = self[..n] + "...";
 
 			return value;
 		}

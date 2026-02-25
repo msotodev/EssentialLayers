@@ -111,7 +111,7 @@ namespace EssentialLayers.Helpers.Extension
 			return new ObservableCollection<T>(self);
 		}
 
-		public static bool TryFirst<T>(this IEnumerable<T> self, out T value)
+		public static bool TryFirst<T>(this IEnumerable<T> self, out T? value)
 		{
 			T first = self.FirstOrDefault();
 
@@ -128,7 +128,7 @@ namespace EssentialLayers.Helpers.Extension
 		}
 
 		public static bool TryFirst<T>(
-			this IEnumerable<T> self, Func<T, bool> predicate, out T value
+			this IEnumerable<T> self, Func<T, bool> predicate, out T? value
 		)
 		{
 			T first = self.FirstOrDefault(predicate);
@@ -145,7 +145,7 @@ namespace EssentialLayers.Helpers.Extension
 			return false;
 		}
 
-		public static bool TrySingle<T>(this IEnumerable<T> self, out T value)
+		public static bool TrySingle<T>(this IEnumerable<T> self, out T? value)
 		{
 			T first = self.Single();
 
@@ -162,7 +162,7 @@ namespace EssentialLayers.Helpers.Extension
 		}
 
 		public static bool TrySingle<T>(
-			this IEnumerable<T> self, Func<T, bool> predicate, out T value
+			this IEnumerable<T> self, Func<T, bool> predicate, out T? value
 		)
 		{
 			T first = self.Single(predicate);

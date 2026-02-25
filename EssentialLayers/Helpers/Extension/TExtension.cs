@@ -46,17 +46,17 @@ namespace EssentialLayers.Helpers.Extension
 			return new HashSet<T>(values).Contains(self).False();
 		}
 
-		public static T DeepCopy<T>(this T self)
+		public static T? DeepCopy<T>(this T self)
 		{
 			try
 			{
 				string serialized = JsonConvert.SerializeObject(self);
 
-				return JsonConvert.DeserializeObject<T>(serialized)!;
+				return JsonConvert.DeserializeObject<T>(serialized);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new Exception("Error on make the deep copy from the object", e);
+				return default;
 			}
 		}
 
@@ -77,14 +77,14 @@ namespace EssentialLayers.Helpers.Extension
 			}
 		}
 
-		public static T Deserialize<T>(
+		public static T? Deserialize<T>(
 			this string self, bool indented = false, bool insensitive = false
 		)
 		{
 			try
 			{
 				JsonSerializerSettings settings = SerializerSettings(indented, insensitive);
-				T deserialized = JsonConvert.DeserializeObject<T>(self, settings);
+				T? deserialized = JsonConvert.DeserializeObject<T>(self, settings);
 
 				return deserialized;
 			}
@@ -111,20 +111,20 @@ namespace EssentialLayers.Helpers.Extension
 			}
 		}
 
-		public static ResultHelper<T> DeserializeResult<T>(
+		public static ResultHelper<T?> DeserializeResult<T>(
 			this string self, bool indented, bool insensitive = false
 		)
 		{
 			try
 			{
 				JsonSerializerSettings settings = SerializerSettings(indented, insensitive);
-				T deserialized = JsonConvert.DeserializeObject<T>(self, settings);
+				T? deserialized = JsonConvert.DeserializeObject<T>(self, settings);
 
-				return ResultHelper<T>.Success(deserialized);
+				return ResultHelper<T?>.Success(deserialized);
 			}
 			catch (Exception e)
 			{
-				return ResultHelper<T>.Fail(e);
+				return ResultHelper<T?>.Fail(e);
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace EssentialLayers.Helpers.Extension
 			return false;
 		}
 
-		public static T SearchProperty<T>(this object obj, params string[] propertyNames)
+		public static T? SearchProperty<T>(this object obj, params string[] propertyNames)
 		{
 			try
 			{
@@ -160,7 +160,7 @@ namespace EssentialLayers.Helpers.Extension
 				{
 					PropertyInfo property = properties.FirstOrDefault(p => p.Name == propertyName);
 
-					if (!string.IsNullOrEmpty(propertyName)) return (T)property!.GetValue(obj)!;
+					if (!string.IsNullOrEmpty(propertyName)) return (T)property.GetValue(obj);
 				}
 			}
 			catch (Exception e)

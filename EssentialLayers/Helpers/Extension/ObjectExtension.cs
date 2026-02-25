@@ -92,16 +92,6 @@ namespace EssentialLayers.Helpers.Extension
 			return default;
 		}
 
-		public static bool IsNull(this object self)
-		{
-			return self == null;
-		}
-
-		public static bool NotNull(this object self)
-		{
-			return self != null;
-		}
-
 		public static bool NotEquals(this object self, object other)
 		{
 			return !self.Equals(other);
