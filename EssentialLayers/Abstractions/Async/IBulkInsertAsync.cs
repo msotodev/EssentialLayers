@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Abstractions.Async
 {
-	public interface IBulkAsync<T> where T : class
+	public interface IBulkInsertAsync<T> where T : class
 	{
-		Task<Response> BulkAsync(List<T> values);
+		Task<Response> BulkInsertAsync(IReadOnlyList<T> values);
 	}
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace EssentialLayers.Abstractions.Sync
 {
-	public interface IBulk<T> where T : class
+	public interface IBulkInsert<T> where T : class
 	{
-		Response Bulk(List<T> values);
+		Response BulkInsert(IReadOnlyList<T> values);
 	}
 }
