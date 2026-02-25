@@ -13,20 +13,9 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Result-Handling Cache Error-Handling Helpers Exstension</PackageTags>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
-		<Version>1.7.0</Version>
+		<Version>1.7.1</Version>
 		<Title>$(AssemblyName)</Title>
-		<PackageReleaseNotes> - feat: New GetBytes method in Extensions `25-02-2026`
- - feat: New integer common option model `25-02-2026`
- - feat: New sync and async abstractions about common methods `25-02-2026`
- - Updating of dependencies to the last version `14-10-2025`
- - New ToBase64 extension in String extension `14/08/2025`
- - New Response design pattern to manage responses of methods and override to Success in ResultHelper `29/07/2025`
- - Better implementation of RemoveDiacritics; New parameter 'includeWhiteSpaces' in IsEmpty and NotEmpty in String extensions `21-05-2025`
- - New TryHanlder and fixed issues in Capitalize extension `07/04/2025`
- - Null validation in String extensions `03/03/2025`
- - Serializer has changed from System.Text.Json to Newtonsoft.Json `18/02/2025`
- - Updating of nuget packages to the last version `18/02/2025`
- - New compress methods to bytes array and streams `13/01/2025`</PackageReleaseNotes>
+		<PackageReleaseNotes> - refactor: improve collection return types in abstractions and bulk naming `25-02-2026`</PackageReleaseNotes>
 		<Authors>MSoto</Authors>
 	</PropertyGroup>
 
