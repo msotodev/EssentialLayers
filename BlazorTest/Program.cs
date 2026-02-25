@@ -1,6 +1,7 @@
 using BlazorTest.Components;
 using BlazorTest.Services.AspApi;
 using BlazorTest.Services.Users;
+using EssentialLayers.AzureBlobs;
 using EssentialLayers.Request;
 using EssentialLayers.Request.Models;
 
@@ -9,7 +10,6 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.UseRequest();
-
 builder.Services.AddScoped<IAspApiService, AspApiService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 
@@ -29,6 +29,8 @@ app.Services.ConfigureRequest(
 		BaseUri = configuration.GetSection("Apis").GetValue<string>("Local")!
 	}
 );
+
+app.Services.ConfigureAzureBlobs("YOUR_CONNECTION_STRING");
 
 app.UseHttpsRedirection();
 

@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\EssentialLayers.AzureBlobs\EssentialLayers.AzureBlobs.csproj" />
+    <ProjectReference Include="..\EssentialLayers.Dapper\EssentialLayers.Dapper.csproj" />
     <ProjectReference Include="..\EssentialLayers.Request\EssentialLayers.Request.csproj" />
     <ProjectReference Include="..\EssentialLayers\EssentialLayers.csproj" />
   </ItemGroup>
