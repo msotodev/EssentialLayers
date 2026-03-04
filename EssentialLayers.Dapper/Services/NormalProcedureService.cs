@@ -12,7 +12,7 @@ namespace EssentialLayers.Dapper.Services
 		IOptions<ConnectionOption> options
 	) : INormalProcedure
 	{
-		private readonly ProcedureHelper _procedureHelper = new(options.Value.ConnectionString);
+		private readonly NormalProcedureHelper _procedureHelper = new(options.Value.ConnectionString);
 
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure

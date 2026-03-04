@@ -12,17 +12,17 @@ namespace EssentialLayers.Dapper.Services
 		IOptions<ConnectionOption> options
 	) : IMultipleProcedure
 	{
-		private readonly ProcedureHelper _procedureHelper = new(options.Value.ConnectionString);
+		private readonly MultipleProcedureHelper _procedureHelper = new(options.Value.ConnectionString);
 
 		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> ExecuteMultiple<TRequest>(
 			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteMultiple(
+		) => _procedureHelper.Execute(
 			request, storedProcedure
 		);
 
 		public Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> ExecuteMultipleAsync<TRequest>(
 			TRequest request, string storedProcedure
-		) =>_procedureHelper.ExecuteMultipleAsync(
+		) => _procedureHelper.ExecuteAsync(
 			request, storedProcedure
 		);
 	}
