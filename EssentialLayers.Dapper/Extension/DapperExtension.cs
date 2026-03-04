@@ -118,7 +118,7 @@ namespace EssentialLayers.Dapper.Extension
 
 			foreach (PropertyInfo property in propertiesFirst)
 			{
-				result.Columns.Add(property.Name);
+				result.Columns.Add(property.Name, property.PropertyType);
 			}
 
 			foreach (T self in selfs)
