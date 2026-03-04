@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Services
 {
-	internal class ProcedureService(
+	internal class NormalProcedureService(
 		IOptions<ConnectionOption> options
-	) : IComplexProcedure, INormalProcedure, IMultipleProcedure
+	) : INormalProcedure
 	{
 		private readonly ProcedureHelper _procedureHelper = new(options.Value.ConnectionString);
 
@@ -35,40 +35,6 @@ namespace EssentialLayers.Dapper.Services
 		public Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		) => _procedureHelper.ExecuteAllAsync<TResult, TRequest>(
-			request, storedProcedure
-		);
-
-		public ResultHelper<TResult> ExecuteComplex<TResult, TRequest>(
-			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteComplex<TResult, TRequest>(request, storedProcedure);
-
-		public Task<ResultHelper<TResult>> ExecuteComplexAsync<TResult, TRequest>(
-			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteComplexAsync<TResult, TRequest>(
-			request, storedProcedure
-		);
-
-		public ResultHelper<IEnumerable<TResult>> ExecuteComplexAll<TResult, TRequest>(
-			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteComplexAll<TResult, TRequest>(
-			request, storedProcedure
-		);
-
-		public Task<ResultHelper<IEnumerable<TResult>>> ExecuteComplexAllAsync<TResult, TRequest>(
-			TRequest request, string storedProcedure
-		) =>_procedureHelper.ExecuteComplexAllAsync<TResult, TRequest>(
-			request, storedProcedure
-		);
-
-		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> ExecuteMultiple<TRequest>(
-			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteMultiple(
-			request, storedProcedure
-		);
-
-		public Task<ResultHelper<IEnumerable<IEnumerable<dynamic>>>> ExecuteMultipleAsync<TRequest>(
-			TRequest request, string storedProcedure
-		) =>_procedureHelper.ExecuteMultipleAsync(
 			request, storedProcedure
 		);
 
