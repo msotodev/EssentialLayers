@@ -16,23 +16,23 @@ namespace EssentialLayers.Dapper.Services
 
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteComplex<TResult, TRequest>(request, storedProcedure);
+		) => _procedureHelper.Execute<TResult, TRequest>(request, storedProcedure);
 
 		public Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteComplexAsync<TResult, TRequest>(
+		) => _procedureHelper.ExecuteAsync<TResult, TRequest>(
 			request, storedProcedure
 		);
 
 		public ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
 			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteComplexAll<TResult, TRequest>(
+		) => _procedureHelper.ExecuteAll<TResult, TRequest>(
 			request, storedProcedure
 		);
 
 		public Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
-		) => _procedureHelper.ExecuteComplexAllAsync<TResult, TRequest>(
+		) => _procedureHelper.ExecuteAllAsync<TResult, TRequest>(
 			request, storedProcedure
 		);
 	}

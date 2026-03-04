@@ -17,7 +17,7 @@ namespace EssentialLayers.Dapper.Helpers
 	{
 		private readonly string ConnectionString = connectionString;
 
-		public ResultHelper<TResult> ExecuteComplex<TResult, TRequest>(
+		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -54,7 +54,7 @@ namespace EssentialLayers.Dapper.Helpers
 			}
 		}
 
-		public async Task<ResultHelper<TResult>> ExecuteComplexAsync<TResult, TRequest>(
+		public async Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -91,7 +91,7 @@ namespace EssentialLayers.Dapper.Helpers
 			}
 		}
 
-		public ResultHelper<IEnumerable<TResult>> ExecuteComplexAll<TResult, TRequest>(
+		public ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
@@ -128,7 +128,7 @@ namespace EssentialLayers.Dapper.Helpers
 			}
 		}
 
-		public async Task<ResultHelper<IEnumerable<TResult>>> ExecuteComplexAllAsync<TResult, TRequest>(
+		public async Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
