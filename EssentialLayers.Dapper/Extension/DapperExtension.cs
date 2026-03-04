@@ -85,37 +85,39 @@ namespace EssentialLayers.Dapper.Extension
 				property =>
 				{
 					object value = property.GetValue(self)!;
-					string name = property.PropertyType.Name;
-
-					DbType dbType = DbTypeToCSharpTypes[name];
-
 					string parameterName = $"@{property.Name}";
 
-					if (dbType == DbType.Object)
+					if (property.PropertyType.IsValueType)
+					{
+						string name = property.PropertyType.Name;
+
+						DbType dbType = DbTypeToCSharpTypes[name];
+
+						dinamicParameters.Add(parameterName, value, dbType);
+					}
+					else if (
+						property.PropertyType.IsGenericType &&
+						property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
+					)
 					{
 						IEnumerable<object> enumerable = (value as IEnumerable<object>)!;
+
 						DataTable dataTable = enumerable.ParseDataTable();
-						string typeName = enumerable.FirstOrDefault()!.GetType().Name;
 
 						dinamicParameters.Add(parameterName, dataTable);
 					}
-					else
+					else if (property.PropertyType.IsClass)
 					{
-						if (property.PropertyType.IsValueType)
-						{
-							dinamicParameters.Add(parameterName, value, dbType);
-						}
-						else
-						{
-							List<PropertyInfo> properties = [.. value.GetType().GetProperties()];
+						List<PropertyInfo> properties = [.. value.GetType().GetProperties()];
 
-							properties.ForEach(
-								property =>
-								{
-									dinamicParameters.Add($"@{property.Name}", property.GetValue(self), dbType);
-								}
-							);
-						}
+						properties.ForEach(
+							property =>
+							{
+								DbType dbType = DbTypeToCSharpTypes[property.PropertyType.Name];
+
+								dinamicParameters.Add(parameterName, property.GetValue(value), dbType);
+							}
+						);
 					}
 				}
 			);
