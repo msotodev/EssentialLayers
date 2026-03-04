@@ -101,7 +101,21 @@ namespace EssentialLayers.Dapper.Extension
 					}
 					else
 					{
-						dinamicParameters.Add(parameterName, value, dbType);
+						if (property.PropertyType.IsValueType)
+						{
+							dinamicParameters.Add(parameterName, value, dbType);
+						}
+						else
+						{
+							List<PropertyInfo> properties = [.. value.GetType().GetProperties()];
+
+							properties.ForEach(
+								property =>
+								{
+									dinamicParameters.Add($"@{property.Name}", property.GetValue(self), dbType);
+								}
+							);
+						}
 					}
 				}
 			);
