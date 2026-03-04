@@ -6,15 +6,19 @@ namespace EssentialLayers.Dapper.Interfaces
 {
 	public interface IComplexProcedure
 	{
-		ResultHelper<TResult> ExecuteComplex<TResult, TRequest>(
+		ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		);
 
-		ResultHelper<IEnumerable<TResult>> ExecuteComplexAll<TResult, TRequest>(
+		Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		);
 
-		Task<ResultHelper<IEnumerable<TResult>>> ExecuteComplexAllAsync<TResult, TRequest>(
+		ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		);
 	}

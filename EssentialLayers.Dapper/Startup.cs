@@ -14,10 +14,9 @@ namespace EssentialLayers.Dapper
 		{
 			services.AddOptions<ConnectionOption>().ValidateOnStart();
 
-			services.TryAddScoped<ProcedureService>();
-			services.TryAddScoped<IComplexProcedure>(sp => sp.GetRequiredService<ProcedureService>());
-			services.TryAddScoped<INormalProcedure>(sp => sp.GetRequiredService<ProcedureService>());
-			services.TryAddScoped<IMultipleProcedure>(sp => sp.GetRequiredService<ProcedureService>());
+			services.TryAddScoped<IComplexProcedure, ComplexProcedureService>();
+			services.TryAddScoped<IMultipleProcedure, MultipleProcedureService>();
+			services.TryAddScoped<INormalProcedure, NormalProcedureService>();
 
 			services.TryAddScoped<IQueryService, QueryService>();
 
