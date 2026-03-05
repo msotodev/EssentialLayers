@@ -19,6 +19,11 @@ builder.Services.UseDapper();
 ```
 
 #### Release Notes
+ - fix: IEnumerable<T> and T are considered as a datatable parameter and static cache has been changed by extension method `05/03/2026`
+ - refactor: apply SRP by splitting DapperExtension and ConnectionHelper into focused classes `05/03/2026`
+ - refactor: eliminate duplicated connection pattern via DbExecutor and BaseProcedureHelper (DRY) `05/03/2026`
+ - perf: add reflection cache, fix connection pooling, pure async reader, and ArrayPool for SqlParameter `05/03/2026`
+ - refactor: introduce IDbConnectionFactory to invert connection dependency (DIP) `05/03/2026`
  - fix: Now are included primitives, objects and enumarables as a UDT parameters in Complex Procedures (tested) `04/03/2026`
  - refactor: Fixing method naming `04/03/2026`
  - fix: Now are included primitives, objects and enumarables as a UDT parameters in Complex Procedures `04/03/2026`

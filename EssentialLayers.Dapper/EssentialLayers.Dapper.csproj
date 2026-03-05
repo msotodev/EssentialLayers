@@ -4,7 +4,7 @@
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.4.0</Version>
+		<Version>1.4.1</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Dapper is a complement to the package EssentialLayers to offer an extra layer with the ORM dapper in an easy way, where the main purpose will be, write the business logic in the "stored procedures" using templates that receiving input parameters and return a result set, Currently is just compatible with SQL Server.</Description>
@@ -15,12 +15,11 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Dapper Database MicroORM Helpers</PackageTags>
-		<PackageReleaseNotes> - fix: Now are included primitives, objects and enumarables as a UDT parameters in Complex Procedures (tested)
- - refactor: Fixing method naming `04/03/2026`
- - fix: Now are included primitives, objects and enumarables as a UDT parameters in Complex Procedures `04/03/2026`
- - refactor: Implementation of own helper to decoupling the procedure helper `04/03/2026`
- - fix: Type specification on add column in the Datatable when use ComplexProcedure interface (Reported by user implementation on try to add Datetime field) `04/03/2026`
- - refactor: Implementation of own service to decoupling the procedure service `04/03/2026`</PackageReleaseNotes>
+		<PackageReleaseNotes> - fix: IEnumerable&lt;T&gt; and T are considered as a datatable parameter and static cache has been changed by extension method `05/03/2026`
+ - refactor: apply SRP by splitting DapperExtension and ConnectionHelper into focused classes `05/03/2026`
+ - refactor: eliminate duplicated connection pattern via DbExecutor and BaseProcedureHelper (DRY) `05/03/2026`
+ - perf: add reflection cache, fix connection pooling, pure async reader, and ArrayPool for SqlParameter `05/03/2026`
+ - refactor: introduce IDbConnectionFactory to invert connection dependency (DIP) `05/03/2026`</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Include="..\shared\essential-layers.png">
