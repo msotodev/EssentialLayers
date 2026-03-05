@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EssentialLayers.Dapper.Validators;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
@@ -11,18 +12,15 @@ namespace EssentialLayers.Dapper.Helpers
 			string connectionString
 		)
 		{
-			bool isEmpty = connectionString.IsEmpty();
+			Response validationResponse = ConnectionStringValidator.Validate(connectionString);
 
-			if (isEmpty) return Response.Fail(
-				"The connection string wasn't initilized yet"
-			);
+			if (validationResponse.Ok.False()) return validationResponse;
 
-			using (SqlConnection sqlConnection = new(connectionString))
-			{
-				int affected = sqlConnection.QueryFirst<int>("SELECT 1");
+			using SqlConnection sqlConnection = new(connectionString);
 
-				if (affected == 0) return Response.Fail("Failed to connect to the database");
-			}
+			int affected = sqlConnection.QueryFirst<int>("SELECT 1");
+
+			if (affected == 0) return Response.Fail("Failed to connect to the database");
 
 			return Response.Success();
 		}
