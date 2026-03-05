@@ -8,10 +8,8 @@ namespace EssentialLayers.Dapper.Cache
 	{
 		private static readonly ConcurrentDictionary<Type, PropertyInfo[]> Cache = new();
 
-		internal static PropertyInfo[] GetProperties(
-			Type type
-		) => Cache.GetOrAdd(type, static t => t.GetProperties());
-
-		internal static PropertyInfo[] GetProperties<T>() => GetProperties(typeof(T));
+		internal static PropertyInfo[] GetCachedProperties<T>(
+			this T type
+		) => Cache.GetOrAdd(type.GetType(), static t => t.GetProperties());		
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using EssentialLayers.Dapper.Cache;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 
 namespace EssentialLayers.Dapper.Builders
@@ -13,7 +14,7 @@ namespace EssentialLayers.Dapper.Builders
 
 			using DataTable result = new();
 
-			PropertyInfo[] properties = ReflectionCache.GetProperties<T>();
+			PropertyInfo[] properties = source.ToList().First().GetCachedProperties();
 
 			foreach (PropertyInfo property in properties)
 			{
@@ -31,6 +32,31 @@ namespace EssentialLayers.Dapper.Builders
 
 				result.Rows.Add(dataRow);
 			}
+
+			return result;
+		}
+
+		public static DataTable Build<T>(this T source)
+		{
+			if (source == null) return new DataTable();
+
+			using DataTable result = new();
+
+			PropertyInfo[] properties = source.GetCachedProperties();
+
+			foreach (PropertyInfo property in properties)
+			{
+				result.Columns.Add(property.Name, property.PropertyType);
+			}
+
+			DataRow dataRow = result.NewRow();
+
+			foreach (PropertyInfo property in properties)
+			{
+				dataRow[property.Name] = property.GetValue(source)!;
+			}
+
+			result.Rows.Add(dataRow);
 
 			return result;
 		}
