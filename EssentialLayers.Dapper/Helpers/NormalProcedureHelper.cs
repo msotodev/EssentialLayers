@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EssentialLayers.Dapper.Abstractions;
 using EssentialLayers.Dapper.Extension;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
@@ -6,25 +7,24 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
 namespace EssentialLayers.Dapper.Helpers
 {
-	public class NormalProcedureHelper(string connectionString)
+	public class NormalProcedureHelper(
+		IDbConnectionFactory connectionFactory
+	)
 	{
-		private readonly string ConnectionString = connectionString;
-
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<TResult>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 			try
 			{
@@ -51,11 +51,11 @@ namespace EssentialLayers.Dapper.Helpers
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<TResult>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 			try
 			{
@@ -82,11 +82,11 @@ namespace EssentialLayers.Dapper.Helpers
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<IEnumerable<TResult>>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 			try
 			{
@@ -113,11 +113,11 @@ namespace EssentialLayers.Dapper.Helpers
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<IEnumerable<TResult>>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 			try
 			{
