@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EssentialLayers.Dapper.Mappers;
 using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -22,7 +23,7 @@ namespace EssentialLayers.Dapper.Extension
 			{
 				while (executeReader.Read())
 				{
-					T instance = System.Activator.CreateInstance<T>();
+					T instance = Activator.CreateInstance<T>();
 					ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
 
 					foreach (DbColumn column in columns)
@@ -49,7 +50,7 @@ namespace EssentialLayers.Dapper.Extension
 			{
 				while (await executeReader.ReadAsync())
 				{
-					T instance = System.Activator.CreateInstance<T>();
+					T instance = Activator.CreateInstance<T>();
 					ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
 
 					foreach (DbColumn column in columns)
@@ -74,11 +75,13 @@ namespace EssentialLayers.Dapper.Extension
 			{
 				object value = dynamicParameters.Get<object>(parameterName);
 
-				sqlParameters.Add(new SqlParameter
-				{
-					ParameterName = parameterName,
-					Value = value
-				});
+				sqlParameters.Add(
+					new SqlParameter
+					{
+						ParameterName = parameterName,
+						Value = value
+					}
+				);
 			}
 
 			return [.. sqlParameters];
@@ -94,12 +97,14 @@ namespace EssentialLayers.Dapper.Extension
 				DbType dbType = property.PropertyType.ToDbType();
 				object value = property.GetValue(self)!;
 
-				sqlParameters.Add(new SqlParameter
-				{
-					ParameterName = $"@{property.Name}",
-					Value = value,
-					DbType = dbType
-				});
+				sqlParameters.Add(
+					new SqlParameter
+					{
+						ParameterName = $"@{property.Name}",
+						Value = value,
+						DbType = dbType
+					}
+				);
 			}
 
 			return [.. sqlParameters];

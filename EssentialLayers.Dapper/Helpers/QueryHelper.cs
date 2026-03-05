@@ -1,11 +1,8 @@
 ﻿using Dapper;
 using EssentialLayers.Dapper.Abstractions;
-using EssentialLayers.Dapper.Extension;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,112 +11,66 @@ namespace EssentialLayers.Dapper.Helpers
 	public class QueryHelper(
 		ILogger<QueryHelper> logger,
 		IDbConnectionFactory connectionFactory
-	)
+	) : BaseProcedureHelper(connectionFactory)
 	{
 		public ResultHelper<HashSet<ResultDto>> QueryAll<ResultDto>(
 			string query, object? param = null
-		)
-		{
-			try
+		) => Execute<HashSet<ResultDto>>(
+			connection =>
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
-
-				if (response.Ok.False()) return ResultHelper<HashSet<ResultDto>>.Fail(response.Message);
-
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
+				IEnumerable<ResultDto> results = connection.Query<ResultDto>(query, param);
 
-				IEnumerable<ResultDto> queryResults = sqlConnection.Query<ResultDto>(query, param);
+				logger.LogInformation(results.Serialize(true));
 
-				logger.LogInformation(queryResults.Serialize(true));
-
-				return ResultHelper<HashSet<ResultDto>>.Success([.. queryResults]);
+				return [.. results];
 			}
-			catch (Exception e)
-			{
-				return e.HandleException<HashSet<ResultDto>>();
-			}
-		}
+		);
 
-		public async Task<ResultHelper<HashSet<ResultDto>>> QueryAllAsync<ResultDto>(
+		public Task<ResultHelper<HashSet<ResultDto>>> QueryAllAsync<ResultDto>(
 			string query, object? param = null
-		)
-		{
-			try
+		) => ExecuteAsync<HashSet<ResultDto>>(
+			async connection =>
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
-
-				if (response.Ok.False()) return ResultHelper<HashSet<ResultDto>>.Fail(response.Message);
-
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
+				IEnumerable<ResultDto> results = await connection.QueryAsync<ResultDto>(query, param);
 
-				IEnumerable<ResultDto> queryResults = await sqlConnection.QueryAsync<ResultDto>(
-					query, param
-				);
+				logger.LogInformation(results.Serialize(true));
 
-				logger.LogInformation(queryResults.Serialize(true));
-
-				return ResultHelper<HashSet<ResultDto>>.Success([.. queryResults]);
+				return [.. results];
 			}
-			catch (Exception e)
-			{
-				return e.HandleException<HashSet<ResultDto>>();
-			}
-		}
+		);
 
 		public ResultHelper<ResultDto> QueryFirst<ResultDto>(
 			string query, object? param = null
-		)
-		{
-			try
+		) => Execute(
+			connection =>
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
-
-				if (response.Ok.False()) return ResultHelper<ResultDto>.Fail(response.Message);
-
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
-
-				ResultDto? first = sqlConnection.QueryFirst<ResultDto>(query, param);
+				ResultDto first = connection.QueryFirst<ResultDto>(query, param);
 
 				logger.LogInformation(first.Serialize());
 
-				return ResultHelper<ResultDto>.Success(first);
+				return first;
 			}
-			catch (Exception e)
-			{
-				return e.HandleException<ResultDto>();
-			}
-		}
+		);
 
-		public async Task<ResultHelper<ResultDto>> QueryFirstAsync<ResultDto>(
+		public Task<ResultHelper<ResultDto>> QueryFirstAsync<ResultDto>(
 			string query, object? param = null
-		)
-		{
-			try
+		) => ExecuteAsync(
+			async connection =>
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
-
-				if (response.Ok.False()) return ResultHelper<ResultDto>.Fail(response.Message);
-
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
-
-				ResultDto? first = await sqlConnection.QueryFirstAsync<ResultDto>(query, param);
+				ResultDto first = await connection.QueryFirstAsync<ResultDto>(query, param);
 
 				logger.LogInformation(first.Serialize());
 
-				return ResultHelper<ResultDto>.Success(first);
+				return first;
 			}
-			catch (Exception e)
-			{
-				return e.HandleException<ResultDto>();
-			}
-		}
+		);
 	}
 }
