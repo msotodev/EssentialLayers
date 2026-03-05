@@ -1,21 +1,20 @@
-﻿using EssentialLayers.Dapper.Helpers;
+﻿using EssentialLayers.Dapper.Abstractions;
+using EssentialLayers.Dapper.Helpers;
 using EssentialLayers.Dapper.Interfaces;
-using EssentialLayers.Dapper.Options;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Services
 {
 	internal class QueryService(
-		IOptions<ConnectionOption> options,
+		IDbConnectionFactory connectionFactory,
 		ILogger<QueryHelper> logger
 	) : IQueryService
 	{
 		private readonly QueryHelper _queryHelper = new(
-			logger, options.Value.ConnectionString
+			logger, connectionFactory
 		);
 
 		public ResultHelper<HashSet<ResultDto>> QueryAll<ResultDto>(
@@ -32,6 +31,6 @@ namespace EssentialLayers.Dapper.Services
 
 		public Task<ResultHelper<ResultDto>> QueryFirstAsync<ResultDto>(
 			string query, object? param = null
-		) =>  _queryHelper.QueryFirstAsync<ResultDto>(query, param);
+		) => _queryHelper.QueryFirstAsync<ResultDto>(query, param);
 	}
 }

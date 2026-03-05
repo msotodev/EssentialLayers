@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EssentialLayers.Dapper.Abstractions;
 using EssentialLayers.Dapper.Extension;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
@@ -11,24 +12,23 @@ using System.Threading.Tasks;
 namespace EssentialLayers.Dapper.Helpers
 {
 	public class QueryHelper(
-		ILogger<QueryHelper> logger, string connectionString
+		ILogger<QueryHelper> logger,
+		IDbConnectionFactory connectionFactory
 	)
 	{
-		private readonly string ConnectionString = connectionString;
-
 		public ResultHelper<HashSet<ResultDto>> QueryAll<ResultDto>(
 			string query, object? param = null
 		)
 		{
 			try
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 				if (response.Ok.False()) return ResultHelper<HashSet<ResultDto>>.Fail(response.Message);
 
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(ConnectionString);
+				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 				IEnumerable<ResultDto> queryResults = sqlConnection.Query<ResultDto>(query, param);
 
@@ -48,13 +48,13 @@ namespace EssentialLayers.Dapper.Helpers
 		{
 			try
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 				if (response.Ok.False()) return ResultHelper<HashSet<ResultDto>>.Fail(response.Message);
 
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(ConnectionString);
+				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 				IEnumerable<ResultDto> queryResults = await sqlConnection.QueryAsync<ResultDto>(
 					query, param
@@ -76,13 +76,13 @@ namespace EssentialLayers.Dapper.Helpers
 		{
 			try
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 				if (response.Ok.False()) return ResultHelper<ResultDto>.Fail(response.Message);
 
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(ConnectionString);
+				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 				ResultDto? first = sqlConnection.QueryFirst<ResultDto>(query, param);
 
@@ -102,13 +102,13 @@ namespace EssentialLayers.Dapper.Helpers
 		{
 			try
 			{
-				Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+				Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 				if (response.Ok.False()) return ResultHelper<ResultDto>.Fail(response.Message);
 
 				logger.LogInformation(query, param);
 
-				using SqlConnection sqlConnection = new(ConnectionString);
+				using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 				ResultDto? first = await sqlConnection.QueryFirstAsync<ResultDto>(query, param);
 

@@ -1,18 +1,17 @@
-﻿using EssentialLayers.Dapper.Helpers;
+﻿using EssentialLayers.Dapper.Abstractions;
+using EssentialLayers.Dapper.Helpers;
 using EssentialLayers.Dapper.Interfaces;
-using EssentialLayers.Dapper.Options;
 using EssentialLayers.Helpers.Result;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Services
 {
 	internal class NormalProcedureService(
-		IOptions<ConnectionOption> options
+		IDbConnectionFactory connectionFactory
 	) : INormalProcedure
 	{
-		private readonly NormalProcedureHelper _procedureHelper = new(options.Value.ConnectionString);
+		private readonly NormalProcedureHelper _procedureHelper = new(connectionFactory);
 
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
