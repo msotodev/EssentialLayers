@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EssentialLayers.Dapper.Abstractions;
 using EssentialLayers.Dapper.Extension;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
@@ -12,20 +13,18 @@ using System.Threading.Tasks;
 namespace EssentialLayers.Dapper.Helpers
 {
 	public class ComplexProcedureHelper(
-		string connectionString
+		IDbConnectionFactory connectionFactory
 	)
 	{
-		private readonly string ConnectionString = connectionString;
-
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<TResult>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 			using SqlCommand command = new(storedProcedure, sqlConnection);
 
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
@@ -58,11 +57,11 @@ namespace EssentialLayers.Dapper.Helpers
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<TResult>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 			using SqlCommand command = new(storedProcedure, sqlConnection);
 
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
@@ -95,11 +94,11 @@ namespace EssentialLayers.Dapper.Helpers
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<IEnumerable<TResult>>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 			using SqlCommand command = new(storedProcedure, sqlConnection);
 
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
@@ -132,11 +131,11 @@ namespace EssentialLayers.Dapper.Helpers
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<IEnumerable<TResult>>.Fail(response.Message);
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 			using SqlCommand command = new(storedProcedure, sqlConnection);
 
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();

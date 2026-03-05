@@ -1,11 +1,10 @@
 ﻿using Dapper;
+using EssentialLayers.Dapper.Mappers;
 using Microsoft.Data.SqlClient;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -23,14 +22,14 @@ namespace EssentialLayers.Dapper.Extension
 			{
 				while (executeReader.Read())
 				{
-					T instance = Activator.CreateInstance<T>();
+					T instance = System.Activator.CreateInstance<T>();
 					ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
 
 					foreach (DbColumn column in columns)
 					{
 						object value = executeReader.GetValue(column.ColumnName);
 
-						instance!.GetType().GetProperty(column.ColumnName).SetValue(instance, value);
+						instance!.GetType().GetProperty(column.ColumnName)!.SetValue(instance, value);
 					}
 
 					result.Add(instance);
@@ -50,7 +49,7 @@ namespace EssentialLayers.Dapper.Extension
 			{
 				while (await executeReader.ReadAsync())
 				{
-					T instance = Activator.CreateInstance<T>();
+					T instance = System.Activator.CreateInstance<T>();
 					ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
 
 					foreach (DbColumn column in columns)
@@ -75,42 +74,35 @@ namespace EssentialLayers.Dapper.Extension
 			{
 				object value = dynamicParameters.Get<object>(parameterName);
 
-				SqlParameter sqlParameter = new()
+				sqlParameters.Add(new SqlParameter
 				{
 					ParameterName = parameterName,
 					Value = value
-				};
-
-				sqlParameters.Add(sqlParameter);
+				});
 			}
 
 			return [.. sqlParameters];
 		}
 
-		public static SqlParameter[] ToSqlParameterCollection<T>(
-			this T self
-		)
+		public static SqlParameter[] ToSqlParameterCollection<T>(this T self)
 		{
 			List<PropertyInfo> properties = [.. self!.GetType().GetProperties()];
-			SqlParameter[] sqlParameters = new SqlParameter[properties.Count];
+			IList<SqlParameter> sqlParameters = [];
 
-			foreach (var property in properties)
+			foreach (PropertyInfo property in properties)
 			{
-				DbType sqlDbType = property.PropertyType.GetDbType();
+				DbType dbType = property.PropertyType.ToDbType();
 				object value = property.GetValue(self)!;
-				string parameterName = $"@{property.Name}";
 
-				SqlParameter sqlParameter = new()
+				sqlParameters.Add(new SqlParameter
 				{
-					ParameterName = parameterName,
+					ParameterName = $"@{property.Name}",
 					Value = value,
-					DbType = sqlDbType
-				};
-
-				sqlParameters.Append(sqlParameter);
+					DbType = dbType
+				});
 			}
 
-			return sqlParameters;
+			return [.. sqlParameters];
 		}
 	}
 }

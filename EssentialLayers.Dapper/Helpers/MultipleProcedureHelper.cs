@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EssentialLayers.Dapper.Abstractions;
 using EssentialLayers.Dapper.Extension;
 using EssentialLayers.Helpers.Extension;
 using EssentialLayers.Helpers.Result;
@@ -11,15 +12,15 @@ using static Dapper.SqlMapper;
 
 namespace EssentialLayers.Dapper.Helpers
 {
-	public class MultipleProcedureHelper(string connectionString)
+	public class MultipleProcedureHelper(
+		IDbConnectionFactory connectionFactory
+	)
 	{
-		private readonly string ConnectionString = connectionString;
-
 		public ResultHelper<IEnumerable<IEnumerable<dynamic>>> Execute<TRequest>(
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Fail(
 				response.Message
@@ -27,7 +28,7 @@ namespace EssentialLayers.Dapper.Helpers
 
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 			try
 			{
@@ -59,7 +60,7 @@ namespace EssentialLayers.Dapper.Helpers
 			TRequest request, string storedProcedure
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(ConnectionString);
+			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
 
 			if (response.Ok.False()) return ResultHelper<IEnumerable<IEnumerable<dynamic>>>.Fail(
 				response.Message
@@ -67,7 +68,7 @@ namespace EssentialLayers.Dapper.Helpers
 
 			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
 
-			using SqlConnection sqlConnection = new(ConnectionString);
+			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
 
 			try
 			{
