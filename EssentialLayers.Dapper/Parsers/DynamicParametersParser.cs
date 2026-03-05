@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EssentialLayers.Dapper.Builders;
+using EssentialLayers.Dapper.Cache;
 using EssentialLayers.Dapper.Mappers;
 using System.Collections.Generic;
 using System.Data;
@@ -13,10 +14,10 @@ namespace EssentialLayers.Dapper.Parsers
 		{
 			if (source == null) return new DynamicParameters();
 
-			List<PropertyInfo> properties = [.. source.GetType().GetProperties()];
+			PropertyInfo[] properties = source.GetCachedProperties();
 			DynamicParameters dynamicParameters = new();
 
-			properties.ForEach(property =>
+			foreach (PropertyInfo property in properties)
 			{
 				object value = property.GetValue(source)!;
 				string parameterName = $"@{property.Name}";
@@ -27,28 +28,21 @@ namespace EssentialLayers.Dapper.Parsers
 
 					dynamicParameters.Add(parameterName, value, dbType);
 				}
-				else if (
-					property.PropertyType.IsGenericType &&
-					property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
-				)
+				else
 				{
-					IEnumerable<object> enumerable = (value as IEnumerable<object>)!;
-					DataTable dataTable = enumerable.Build();
-
-					dynamicParameters.Add(parameterName, dataTable);
-				}
-				else if (property.PropertyType.IsClass)
-				{
-					List<PropertyInfo> nestedProperties = [.. value.GetType().GetProperties()];
-
-					nestedProperties.ForEach(nestedProperty =>
+					if (property.PropertyType.IsGenericType &&
+						property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
+					)
 					{
-						DbType dbType = nestedProperty.PropertyType.ToDbType();
-
-						dynamicParameters.Add(parameterName, nestedProperty.GetValue(value), dbType);
-					});
+						IEnumerable<T> enumerable = (value as IEnumerable<T>)!;
+						dynamicParameters.Add(parameterName, enumerable.Build());
+					}
+					else
+					{
+						dynamicParameters.Add(parameterName, value.Build());
+					}
 				}
-			});
+			}
 
 			return dynamicParameters;
 		}

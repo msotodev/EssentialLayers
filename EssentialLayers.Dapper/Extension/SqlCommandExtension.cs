@@ -1,11 +1,11 @@
 ﻿using Dapper;
-using EssentialLayers.Dapper.Mappers;
 using Microsoft.Data.SqlClient;
+using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.Common;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Extension
@@ -18,16 +18,16 @@ namespace EssentialLayers.Dapper.Extension
 		{
 			IList<T> result = [];
 
-			using (SqlDataReader executeReader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow))
+			using (SqlDataReader reader = sqlCommand.ExecuteReader(CommandBehavior.SingleRow))
 			{
-				while (executeReader.Read())
+				while (reader.Read())
 				{
-					T instance = System.Activator.CreateInstance<T>();
-					ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
+					T instance = Activator.CreateInstance<T>();
+					ReadOnlyCollection<DbColumn> columns = reader.GetColumnSchema();
 
 					foreach (DbColumn column in columns)
 					{
-						object value = executeReader.GetValue(column.ColumnName);
+						object value = reader.GetValue(column.ColumnName);
 
 						instance!.GetType().GetProperty(column.ColumnName)!.SetValue(instance, value);
 					}
@@ -49,7 +49,7 @@ namespace EssentialLayers.Dapper.Extension
 			{
 				while (await executeReader.ReadAsync())
 				{
-					T instance = System.Activator.CreateInstance<T>();
+					T instance = Activator.CreateInstance<T>();
 					ReadOnlyCollection<DbColumn> columns = executeReader.GetColumnSchema();
 
 					foreach (DbColumn column in columns)
@@ -66,43 +66,37 @@ namespace EssentialLayers.Dapper.Extension
 			return result;
 		}
 
-		public static SqlParameter[] ParseSqlParameters(this DynamicParameters dynamicParameters)
+		public static SqlParameter[] ParseSqlParameters(
+			this DynamicParameters dynamicParameters
+		)
 		{
-			IList<SqlParameter> sqlParameters = [];
+			IReadOnlyList<string> names = [.. dynamicParameters.ParameterNames];
+			int count = names.Count;
 
-			foreach (string parameterName in dynamicParameters.ParameterNames)
+			if (count == 0) return [];
+
+			SqlParameter[] rented = ArrayPool<SqlParameter>.Shared.Rent(count);
+
+			try
 			{
-				object value = dynamicParameters.Get<object>(parameterName);
-
-				sqlParameters.Add(new SqlParameter
+				for (int i = 0; i < count; i++)
 				{
-					ParameterName = parameterName,
-					Value = value
-				});
+					rented[i] = new SqlParameter
+					{
+						ParameterName = names[i],
+						Value = dynamicParameters.Get<object>(names[i])
+					};
+				}
+
+				SqlParameter[] result = new SqlParameter[count];
+				Array.Copy(rented, result, count);
+
+				return result;
 			}
-
-			return [.. sqlParameters];
-		}
-
-		public static SqlParameter[] ToSqlParameterCollection<T>(this T self)
-		{
-			List<PropertyInfo> properties = [.. self!.GetType().GetProperties()];
-			IList<SqlParameter> sqlParameters = [];
-
-			foreach (PropertyInfo property in properties)
+			finally
 			{
-				DbType dbType = property.PropertyType.ToDbType();
-				object value = property.GetValue(self)!;
-
-				sqlParameters.Add(new SqlParameter
-				{
-					ParameterName = $"@{property.Name}",
-					Value = value,
-					DbType = dbType
-				});
+				ArrayPool<SqlParameter>.Shared.Return(rented, clearArray: true);
 			}
-
-			return [.. sqlParameters];
 		}
 	}
 }

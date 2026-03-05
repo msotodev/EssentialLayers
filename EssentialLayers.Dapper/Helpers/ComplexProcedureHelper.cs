@@ -1,10 +1,9 @@
 ﻿using Dapper;
 using EssentialLayers.Dapper.Abstractions;
 using EssentialLayers.Dapper.Extension;
-using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Dapper.Parsers;
 using EssentialLayers.Helpers.Result;
 using Microsoft.Data.SqlClient;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -14,154 +13,75 @@ namespace EssentialLayers.Dapper.Helpers
 {
 	public class ComplexProcedureHelper(
 		IDbConnectionFactory connectionFactory
-	)
+	) : BaseProcedureHelper(connectionFactory)
 	{
 		public ResultHelper<TResult> Execute<TResult, TRequest>(
 			TRequest request, string storedProcedure
-		)
-		{
-			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
-
-			if (response.Ok.False()) return ResultHelper<TResult>.Fail(response.Message);
-
-			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
-			using SqlCommand command = new(storedProcedure, sqlConnection);
-
-			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
-			SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
-
-			command.Parameters.AddRange(sqlParameters);
-			command.CommandType = CommandType.StoredProcedure;
-			command.CommandTimeout = 0;
-
-			try
+		) => Execute(
+			connection =>
 			{
-				sqlConnection.Open();
+				using SqlCommand command = BuildCommand(request, storedProcedure, connection);
 
-				TResult first = command.GetResults<TResult>().FirstOrDefault()!;
+				connection.Open();
 
-				return ResultHelper<TResult>.Success(first);
+				return command.GetResults<TResult>().FirstOrDefault()!;
 			}
-			catch (Exception e)
-			{
-				return ResultHelper<TResult>.Fail(e);
-			}
-			finally
-			{
-				sqlConnection.Close();
-				SqlConnection.ClearPool(sqlConnection);
-			}
-		}
+		);
 
-		public async Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
+		public Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
-		)
-		{
-			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
-
-			if (response.Ok.False()) return ResultHelper<TResult>.Fail(response.Message);
-
-			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
-			using SqlCommand command = new(storedProcedure, sqlConnection);
-
-			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
-			SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
-
-			command.Parameters.AddRange(sqlParameters);
-			command.CommandType = CommandType.StoredProcedure;
-			command.CommandTimeout = 0;
-
-			try
+		) => ExecuteAsync(
+			async connection =>
 			{
-				sqlConnection.Open();
+				using SqlCommand command = BuildCommand(request, storedProcedure, connection);
 
-				TResult first = (await command.GetResultsAsync<TResult>()).FirstOrDefault()!;
+				connection.Open();
 
-				return ResultHelper<TResult>.Success(first);
+				return (await command.GetResultsAsync<TResult>()).FirstOrDefault()!;
 			}
-			catch (Exception e)
-			{
-				return ResultHelper<TResult>.Fail(e);
-			}
-			finally
-			{
-				sqlConnection.Close();
-				SqlConnection.ClearPool(sqlConnection);
-			}
-		}
+		);
 
 		public ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
 			TRequest request, string storedProcedure
-		)
-		{
-			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
-
-			if (response.Ok.False()) return ResultHelper<IEnumerable<TResult>>.Fail(response.Message);
-
-			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
-			using SqlCommand command = new(storedProcedure, sqlConnection);
-
-			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
-			SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
-
-			command.Parameters.AddRange(sqlParameters);
-			command.CommandType = CommandType.StoredProcedure;
-			command.CommandTimeout = 0;
-
-			try
+		) => Execute(
+			connection =>
 			{
-				sqlConnection.Open();
+				using SqlCommand command = BuildCommand(request, storedProcedure, connection);
 
-				IEnumerable<TResult> results = command.GetResults<TResult>();
+				connection.Open();
 
-				return ResultHelper<IEnumerable<TResult>>.Success(results);
+				return command.GetResults<TResult>();
 			}
-			catch (Exception e)
-			{
-				return ResultHelper<IEnumerable<TResult>>.Fail(e);
-			}
-			finally
-			{
-				sqlConnection.Close();
-				SqlConnection.ClearPool(sqlConnection);
-			}
-		}
+		);
 
-		public async Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
+		public Task<ResultHelper<IEnumerable<TResult>>> ExecuteAllAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
+		) => ExecuteAsync(
+			async connection =>
+			{
+				using SqlCommand command = BuildCommand(request, storedProcedure, connection);
+
+				connection.Open();
+
+				return await command.GetResultsAsync<TResult>();
+			}
+		);
+
+		private static SqlCommand BuildCommand<TRequest>(
+			TRequest request, string storedProcedure, SqlConnection connection
 		)
 		{
-			Response response = ConnectionHelper.ValidateConnectionString(connectionFactory.ConnectionString);
+			SqlCommand command = new(storedProcedure, connection)
+			{
+				CommandType = CommandType.StoredProcedure,
+				CommandTimeout = 0
+			};
 
-			if (response.Ok.False()) return ResultHelper<IEnumerable<TResult>>.Fail(response.Message);
-
-			using SqlConnection sqlConnection = new(connectionFactory.ConnectionString);
-			using SqlCommand command = new(storedProcedure, sqlConnection);
-
-			DynamicParameters dynamicParameters = request.ParseDynamicParameters();
-			SqlParameter[] sqlParameters = dynamicParameters.ParseSqlParameters();
+			SqlParameter[] sqlParameters = request.Parse().ParseSqlParameters();
 
 			command.Parameters.AddRange(sqlParameters);
-			command.CommandType = CommandType.StoredProcedure;
-			command.CommandTimeout = 0;
 
-			try
-			{
-				sqlConnection.Open();
-
-				IEnumerable<TResult> results = await command.GetResultsAsync<TResult>();
-
-				return ResultHelper<IEnumerable<TResult>>.Success(results);
-			}
-			catch (Exception e)
-			{
-				return ResultHelper<IEnumerable<TResult>>.Fail(e);
-			}
-			finally
-			{
-				sqlConnection.Close();
-				SqlConnection.ClearPool(sqlConnection);
-			}
+			return command;
 		}
 	}
 }
