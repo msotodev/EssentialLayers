@@ -9,7 +9,7 @@ using static Dapper.SqlMapper;
 
 namespace EssentialLayers.Dapper.Helpers
 {
-	public class NormalProcedureHelper(
+	internal class NormalProcedureHelper(
 		IDbConnectionFactory connectionFactory
 	) : BaseProcedureHelper(connectionFactory)
 	{
