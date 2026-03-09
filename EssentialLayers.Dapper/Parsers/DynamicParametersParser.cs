@@ -14,7 +14,7 @@ namespace EssentialLayers.Dapper.Parsers
 		{
 			if (source == null) return new DynamicParameters();
 
-			PropertyInfo[] properties = ReflectionCache.GetProperties(source.GetType());
+			PropertyInfo[] properties = source.GetCachedProperties();
 			DynamicParameters dynamicParameters = new();
 
 			foreach (PropertyInfo property in properties)
@@ -28,24 +28,18 @@ namespace EssentialLayers.Dapper.Parsers
 
 					dynamicParameters.Add(parameterName, value, dbType);
 				}
-				else if (
-					property.PropertyType.IsGenericType &&
-					property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
-				)
+				else
 				{
-					IEnumerable<object> enumerable = (value as IEnumerable<object>)!;
-
-					dynamicParameters.Add(parameterName, enumerable.Build());
-				}
-				else if (property.PropertyType.IsClass)
-				{
-					PropertyInfo[] nestedProperties = ReflectionCache.GetProperties(value.GetType());
-
-					foreach (PropertyInfo nestedProperty in nestedProperties)
+					if (property.PropertyType.IsGenericType &&
+						property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
+					)
 					{
-						DbType dbType = nestedProperty.PropertyType.ToDbType();
-
-						dynamicParameters.Add(parameterName, nestedProperty.GetValue(value), dbType);
+						IEnumerable<T> enumerable = (value as IEnumerable<T>)!;
+						dynamicParameters.Add(parameterName, enumerable.Build());
+					}
+					else
+					{
+						dynamicParameters.Add(parameterName, value.Build());
 					}
 				}
 			}
