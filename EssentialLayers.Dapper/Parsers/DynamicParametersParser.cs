@@ -22,7 +22,7 @@ namespace EssentialLayers.Dapper.Parsers
 				object value = property.GetValue(source)!;
 				string parameterName = $"@{property.Name}";
 
-				if (property.PropertyType.IsValueType)
+				if (property.PropertyType.IsValueType || property.PropertyType == typeof(string))
 				{
 					DbType dbType = property.PropertyType.ToDbType();
 
