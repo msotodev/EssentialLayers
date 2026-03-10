@@ -8,8 +8,16 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace EssentialLayers.Dapper
 {
+	/// <summary>
+	/// Provides extension methods for configuring Dapper services in the dependency injection container.
+	/// </summary>
 	public static class DependencyInjection
 	{
+		/// <summary>
+		/// Adds Dapper services to the service collection.
+		/// </summary>
+		/// <param name="services">The service collection to add services to.</param>
+		/// <returns>The service collection for method chaining.</returns>
 		public static IServiceCollection UseDapper(
 			this IServiceCollection services
 		)

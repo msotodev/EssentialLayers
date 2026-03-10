@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace EssentialLayers.Dapper.Builders
 {
-	public static class DataTableBuilder
+	internal static class DataTableBuilder
 	{
-		public static DataTable Build<T>(this IEnumerable<T> source)
+		internal static DataTable Build<T>(this IEnumerable<T> source)
 		{
 			if (source == null) return new DataTable();
 

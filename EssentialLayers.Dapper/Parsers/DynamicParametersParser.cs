@@ -8,9 +8,9 @@ using System.Reflection;
 
 namespace EssentialLayers.Dapper.Parsers
 {
-	public static class DynamicParametersParser
+	internal static class DynamicParametersParser
 	{
-		public static DynamicParameters Parse<T>(this T source)
+		internal static DynamicParameters Parse<T>(this T source)
 		{
 			if (source == null) return new DynamicParameters();
 

@@ -10,8 +10,17 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Extension
 {
+	/// <summary>
+	/// Provides extension methods for SqlCommand to read results.
+	/// </summary>
 	public static class SqlCommandExtension
 	{
+		/// <summary>
+		/// Reads results from a SqlCommand execution.
+		/// </summary>
+		/// <typeparam name="T">The type to map the results to.</typeparam>
+		/// <param name="sqlCommand">The SqlCommand to read from.</param>
+		/// <returns>An enumerable of results.</returns>
 		public static IEnumerable<T> GetResults<T>(
 			this SqlCommand sqlCommand
 		)
@@ -39,6 +48,12 @@ namespace EssentialLayers.Dapper.Extension
 			return result;
 		}
 
+		/// <summary>
+		/// Asynchronously reads results from a SqlCommand execution.
+		/// </summary>
+		/// <typeparam name="T">The type to map the results to.</typeparam>
+		/// <param name="sqlCommand">The SqlCommand to read from.</param>
+		/// <returns>A Task containing an enumerable of results.</returns>
 		public static async Task<IEnumerable<T>> GetResultsAsync<T>(
 			this SqlCommand sqlCommand
 		)
@@ -66,6 +81,11 @@ namespace EssentialLayers.Dapper.Extension
 			return result;
 		}
 
+		/// <summary>
+		/// Converts DynamicParameters to an array of SqlParameter.
+		/// </summary>
+		/// <param name="dynamicParameters">The DynamicParameters to convert.</param>
+		/// <returns>An array of SqlParameter.</returns>
 		public static SqlParameter[] ParseSqlParameters(
 			this DynamicParameters dynamicParameters
 		)
