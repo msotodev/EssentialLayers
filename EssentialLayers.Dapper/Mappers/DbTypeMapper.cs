@@ -4,6 +4,9 @@ using System.Data;
 
 namespace EssentialLayers.Dapper.Mappers
 {
+	/// <summary>
+	/// Provides methods for mapping .NET types to database types.
+	/// </summary>
 	public static class DbTypeMapper
 	{
 		private static readonly Dictionary<string, DbType> DbTypeMappings = new()
@@ -53,6 +56,11 @@ namespace EssentialLayers.Dapper.Mappers
 			{ "DateTimeOffset", SqlDbType.DateTimeOffset }
 		};
 
+		/// <summary>
+		/// Converts a .NET Type to DbType.
+		/// </summary>
+		/// <param name="type">The .NET Type to convert.</param>
+		/// <returns>The corresponding DbType.</returns>
 		public static DbType ToDbType(this Type type)
 		{
 			if (type == null) return DbType.Object;
@@ -60,6 +68,11 @@ namespace EssentialLayers.Dapper.Mappers
 			return DbTypeMappings[type.Name];
 		}
 
+		/// <summary>
+		/// Converts a .NET Type to SqlDbType.
+		/// </summary>
+		/// <param name="type">The .NET Type to convert.</param>
+		/// <returns>The corresponding SqlDbType.</returns>
 		public static SqlDbType ToSqlDbType(this Type type)
 		{
 			if (type == null) return SqlDbType.Structured;

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Helpers
 {
-	public class ComplexProcedureHelper(
+	internal class ComplexProcedureHelper(
 		IDbConnectionFactory connectionFactory
 	) : BaseProcedureHelper(connectionFactory)
 	{

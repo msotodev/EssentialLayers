@@ -8,9 +8,9 @@ using System.Reflection;
 
 namespace EssentialLayers.Dapper.Parsers
 {
-	public static class DynamicParametersParser
+	internal static class DynamicParametersParser
 	{
-		public static DynamicParameters Parse<T>(this T source)
+		internal static DynamicParameters Parse<T>(this T source)
 		{
 			if (source == null) return new DynamicParameters();
 
@@ -22,7 +22,7 @@ namespace EssentialLayers.Dapper.Parsers
 				object value = property.GetValue(source)!;
 				string parameterName = $"@{property.Name}";
 
-				if (property.PropertyType.IsValueType)
+				if (property.PropertyType.IsValueType || property.PropertyType == typeof(string))
 				{
 					DbType dbType = property.PropertyType.ToDbType();
 

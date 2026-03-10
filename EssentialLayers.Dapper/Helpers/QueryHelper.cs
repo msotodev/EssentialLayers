@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EssentialLayers.Dapper.Helpers
 {
-	public class QueryHelper(
+	internal class QueryHelper(
 		ILogger<QueryHelper> logger,
 		IDbConnectionFactory connectionFactory
 	) : BaseProcedureHelper(connectionFactory)
