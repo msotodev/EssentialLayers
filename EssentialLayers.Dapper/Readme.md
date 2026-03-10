@@ -19,6 +19,8 @@ builder.Services.UseDapper();
 ```
 
 #### Release Notes
+ - fix: IsValueType was not considered string as true, so it returns 'Parameter count mismatch'
+ - feat: Documentation for all public methods
  - fix: IEnumerable<T> and T are considered as a datatable parameter and static cache has been changed by extension method `05/03/2026`
  - refactor: apply SRP by splitting DapperExtension and ConnectionHelper into focused classes `05/03/2026`
  - refactor: eliminate duplicated connection pattern via DbExecutor and BaseProcedureHelper (DRY) `05/03/2026`
