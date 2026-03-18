@@ -2,6 +2,7 @@
 using EssentialLayers.Dapper.Builders;
 using EssentialLayers.Dapper.Cache;
 using EssentialLayers.Dapper.Mappers;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
@@ -21,26 +22,33 @@ namespace EssentialLayers.Dapper.Parsers
 			{
 				object value = property.GetValue(source)!;
 				string parameterName = $"@{property.Name}";
+				Type type = property.PropertyType;
 
-				if (property.PropertyType.IsValueType || property.PropertyType == typeof(string))
+				// Value types: int, bool, DateTime, Guid, enums, etc.
+				if (type.IsValueType)
 				{
-					DbType dbType = property.PropertyType.ToDbType();
-
+					DbType dbType = type.ToDbType();
 					dynamicParameters.Add(parameterName, value, dbType);
 				}
-				else
+				// String: In C# is a class but is mapped directly as a DbType.String
+				else if (type == typeof(string))
 				{
-					if (property.PropertyType.IsGenericType &&
-						property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)
-					)
-					{
-						IEnumerable<T> enumerable = (value as IEnumerable<T>)!;
-						dynamicParameters.Add(parameterName, enumerable.Build());
-					}
-					else
-					{
-						dynamicParameters.Add(parameterName, value.Build());
-					}
+					dynamicParameters.Add(parameterName, value, DbType.String);
+				}
+				// List<T>: converted as DataTable to TVP (Table-Valued Parameter)
+				else if (
+					type.IsGenericType &&
+					type.GetGenericTypeDefinition() == typeof(List<>)
+				)
+				{
+					IEnumerable<object> enumerable = (value as IEnumerable<object>)!;
+					dynamicParameters.Add(parameterName, enumerable.Build());
+				}
+				// Complex classes: converted as DataTable with single row to TVP
+				else if (type.IsClass && value != null)
+				{
+					IEnumerable<object> singleRow = [value];
+					dynamicParameters.Add(parameterName, singleRow.Build());
 				}
 			}
 
