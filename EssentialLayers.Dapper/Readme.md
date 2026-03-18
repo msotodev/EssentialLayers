@@ -15,12 +15,17 @@ builder.Services.Configure<ConnectionOption>(
 		options.ConnectionString = builder.Configuration.GetConnectionString("Local")!;
 	}
 );
+// default enableReflectionCache as true
 builder.Services.UseDapper();
 ```
 
 #### Release Notes
- - fix: IsValueType was not considered string as true, so it returns 'Parameter count mismatch'
- - feat: Documentation for all public methods
+ - fix: Removed ExecuteAllAsync that returns response because it is unnecessary `18/03/2026`
+ - feat: New method overrides to returns only Response in INormalProcedure `18/03/2026`
+ - feat: New method overrides to returns only Response in IComplexProcedure `18/03/2026`
+ - feat: Added cache as configurable property `18/03/2026`
+ - fix: IsValueType was not considered string as true, so it returns 'Parameter count mismatch' `10/03/2026`
+ - feat: Documentation for all public methods `10/03/2026`
  - fix: IEnumerable<T> and T are considered as a datatable parameter and static cache has been changed by extension method `05/03/2026`
  - refactor: apply SRP by splitting DapperExtension and ConnectionHelper into focused classes `05/03/2026`
  - refactor: eliminate duplicated connection pattern via DbExecutor and BaseProcedureHelper (DRY) `05/03/2026`
