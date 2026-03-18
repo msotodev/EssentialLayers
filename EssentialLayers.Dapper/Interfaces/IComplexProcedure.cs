@@ -23,6 +23,17 @@ namespace EssentialLayers.Dapper.Interfaces
 		);
 
 		/// <summary>
+		/// Executes a complex stored procedure and returns Response.
+		/// </summary>
+		/// <typeparam name="TRequest">The type of the request object containing parameters.</typeparam>
+		/// <param name="request">The request object with parameters for the stored procedure.</param>
+		/// <param name="storedProcedure">The name of the stored procedure to execute.</param>
+		/// <returns>A Response containing the first result or an error.</returns>
+		Response Execute<TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		/// <summary>
 		/// Asynchronously executes a complex stored procedure and returns the first result.
 		/// </summary>
 		/// <typeparam name="TResult">The type to map the result to.</typeparam>
@@ -31,6 +42,17 @@ namespace EssentialLayers.Dapper.Interfaces
 		/// <param name="storedProcedure">The name of the stored procedure to execute.</param>
 		/// <returns>A Task containing a ResultHelper with the first result or an error.</returns>
 		Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
+			TRequest request, string storedProcedure
+		);
+
+		/// <summary>
+		/// Asynchronously executes a complex stored procedure and returns Response.
+		/// </summary>
+		/// <typeparam name="TRequest">The type of the request object containing parameters.</typeparam>
+		/// <param name="request">The request object with parameters for the stored procedure.</param>
+		/// <param name="storedProcedure">The name of the stored procedure to execute.</param>
+		/// <returns>A Task containing a Response with the first result or an error.</returns>
+		Task<Response> ExecuteAsync<TRequest>(
 			TRequest request, string storedProcedure
 		);
 

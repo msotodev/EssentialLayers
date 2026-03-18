@@ -17,11 +17,29 @@ namespace EssentialLayers.Dapper.Services
 			TRequest request, string storedProcedure
 		) => _procedureHelper.Execute<TResult, TRequest>(request, storedProcedure);
 
+		public Response Execute<TRequest>(TRequest request, string storedProcedure)
+		{
+			ResultHelper<object> result = _procedureHelper.Execute<object, TRequest>(
+				request, storedProcedure
+			);
+
+			return result.Ok ? Response.Success() : Response.Fail(result.Message);
+		}
+
 		public Task<ResultHelper<TResult>> ExecuteAsync<TResult, TRequest>(
 			TRequest request, string storedProcedure
 		) => _procedureHelper.ExecuteAsync<TResult, TRequest>(
 			request, storedProcedure
 		);
+
+		public async Task<Response> ExecuteAsync<TRequest>(TRequest request, string storedProcedure)
+		{
+			ResultHelper<object> result = await _procedureHelper.ExecuteAsync<object, TRequest>(
+				request, storedProcedure
+			);
+
+			return result.Ok ? Response.Success() : Response.Fail(result.Message);
+		}
 
 		public ResultHelper<IEnumerable<TResult>> ExecuteAll<TResult, TRequest>(
 			TRequest request, string storedProcedure
