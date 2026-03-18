@@ -20,6 +20,7 @@ builder.Services.UseDapper();
 ```
 
 #### Release Notes
+ - fix: handle string, nested classes, and List<T> correctly in DynamicParametersParser `18/03/2026`
  - fix: Removed ExecuteAllAsync that returns response because it is unnecessary `18/03/2026`
  - feat: New method overrides to returns only Response in INormalProcedure `18/03/2026`
  - feat: New method overrides to returns only Response in IComplexProcedure `18/03/2026`
