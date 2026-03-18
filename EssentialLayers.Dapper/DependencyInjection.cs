@@ -1,4 +1,5 @@
 ﻿using EssentialLayers.Dapper.Abstractions;
+using EssentialLayers.Dapper.Cache;
 using EssentialLayers.Dapper.Factories;
 using EssentialLayers.Dapper.Interfaces;
 using EssentialLayers.Dapper.Options;
@@ -19,9 +20,13 @@ namespace EssentialLayers.Dapper
 		/// <param name="services">The service collection to add services to.</param>
 		/// <returns>The service collection for method chaining.</returns>
 		public static IServiceCollection UseDapper(
-			this IServiceCollection services
+			this IServiceCollection services,
+			bool enableReflectionCache = true
 		)
 		{
+			if (enableReflectionCache) ReflectionCache.Enable();
+			else ReflectionCache.Disable();
+
 			services.AddOptions<ConnectionOption>().ValidateOnStart();
 
 			services.TryAddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
