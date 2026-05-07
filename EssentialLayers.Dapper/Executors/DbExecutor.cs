@@ -28,6 +28,10 @@ namespace EssentialLayers.Dapper.Executors
 			}
 			catch (Exception e)
 			{
+				if (e.Message.Contains(
+					"Sequence contains no elements")
+				) return ResultHelper<T>.Success(default!);
+
 				return ResultHelper<T>.Fail(e);
 			}
 			finally
@@ -55,6 +59,10 @@ namespace EssentialLayers.Dapper.Executors
 			}
 			catch (Exception e)
 			{
+				if (e.Message.Contains(
+					"Sequence contains no elements")
+				) return ResultHelper<T>.Success(default!);
+
 				return ResultHelper<T>.Fail(e);
 			}
 			finally
