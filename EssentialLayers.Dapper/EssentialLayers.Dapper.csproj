@@ -4,7 +4,7 @@
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.3.0</Version>
+		<Version>1.6.0</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Dapper is a complement to the package EssentialLayers to offer an extra layer with the ORM dapper in an easy way, where the main purpose will be, write the business logic in the "stored procedures" using templates that receiving input parameters and return a result set, Currently is just compatible with SQL Server.</Description>
@@ -15,11 +15,9 @@
 		<RepositoryUrl>https://github.com/MatProgrammerSM/EssentialLayers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Dapper Database MicroORM Helpers</PackageTags>
-		<PackageReleaseNotes> - The IConnectionString service was removed to allowing the developer configure options, before to call UseDapper function `28/01/2026`
- - Segregation of dependecy IProcedureService in IComplexProcedure, INormalProcedure and IMultipleProcedure `28/01/2026`
- - Refactor Dapper helpers for DI and connection validation `19/01/2026`
- - Health check implementation and updating of dependencies to the last version `21/10/2025`
- - Added SetConnection to set the runtime value `24/01/2025`</PackageReleaseNotes>
+		<PackageReleaseNotes> - feat: Update dependencies to the latest stable version `07/05/2026`
+ - fix: Error on use ExecuteAsync -&gt; Response from INormalProcedure with Enum values `07/05/2026`
+ - fix: Handling of "Sequence contains no elements" exception because it is not a error `07/05/2026`</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Include="..\shared\essential-layers.png">

@@ -19,6 +19,9 @@ builder.Services.UseDapper();
 ```
 
 #### Release Notes
+ - feat: Update dependencies to the latest stable version `07/05/2026`
+ - fix: Error on use ExecuteAsync -> Response from INormalProcedure with Enum values `07/05/2026`
+ - fix: Handling of "Sequence contains no elements" exception because it is not a error `07/05/2026`
  - The IConnectionString service was removed to allowing the developer configure options, before to call UseDapper function `28/01/2026`
  - Segregation of dependecy IProcedureService in IComplexProcedure, INormalProcedure and IMultipleProcedure `28/01/2026`
  - Refactor Dapper helpers for DI and connection validation `19/01/2026`
