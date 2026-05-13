@@ -59,10 +59,10 @@ namespace EssentialLayers.Request.Helpers.Request
 				ResultHelper<HttpContent> contentResult = request.ToHttpContent(requestOptions.ContentType);
 
 				string uri = url;
-				
+
 				GlobalFunctions.Info(url, httpMethod.Method, jsonRequest);
 
-				if (HttpClient.BaseAddress.NotNull()) uri = $"{HttpClient.BaseAddress!.AbsoluteUri}{url}";
+				if (HttpClient.BaseAddress != null) uri = $"{HttpClient.BaseAddress!.AbsoluteUri}{url}";
 
 				using HttpRequestMessage httpRequestMessage = new()
 				{
