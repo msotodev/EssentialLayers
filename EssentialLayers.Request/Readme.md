@@ -119,6 +119,10 @@ public class AuthService (IHttpFactory httpFactory)
 ```
 
 #### Release Notes
+
+v1.6.0
+ - Support to patch method with 3 overrides in IHttpFactory `13-05-2026`
+
  - Removed FactoryTokenProvider as a singleton `31-10-2025`
  - Implemented the IHttpFactory as a stateless, passing as parameter the clientName `24-10-2025`
  - The response from all methods has changed from ResultHelper<T> to HttpResponse<T> to keep compatibility `23-10-2025`

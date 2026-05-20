@@ -4,7 +4,7 @@
 		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<Title>$(AssemblyName)</Title>
-		<Version>1.5.1</Version>
+		<Version>1.6.0</Version>
 		<Authors>MSoto</Authors>
 		<Company>Mario Soto Moreno Co</Company>
 		<Description>EssentialLayers.Dapper is a complement to the package EssentialLayers to offer an extra layer with the ORM dapper in an easy way, where the main purpose will be, write the business logic in the "stored procedures" using templates that receiving input parameters and return a result set, Currently is just compatible with SQL Server.</Description>
@@ -15,11 +15,9 @@
 		<RepositoryUrl>https://github.com/msotodev/EssentialLayers/tree/master/EssentialLayers.Dapper</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Dapper Database MicroORM Helpers</PackageTags>
-		<PackageReleaseNotes> - fix: handle string, nested classes, and List&lt;T&gt; correctly in DynamicParametersParser `18/03/2026`
- - fix: Removed ExecuteAllAsync that returns response because it is unnecessary `18/03/2026`
- - feat: New method overrides to returns only Response in INormalProcedure `18/03/2026`
- - feat: New method overrides to returns only Response in IComplexProcedure `18/03/2026`
- - feat: Added cache as configurable property `18/03/2026`</PackageReleaseNotes>
+		<PackageReleaseNotes> - feat: Update dependencies to the latest stable version `07/05/2026`
+ - fix: Error on use ExecuteAsync -&gt; Response from INormalProcedure with Enum values `07/05/2026`
+ - fix: Handling of "Sequence contains no elements" exception because it is not a error `07/05/2026`</PackageReleaseNotes>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Include="..\shared\essential-layers.png">
@@ -29,9 +27,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapper" Version="2.1.66" />
-		<PackageReference Include="EssentialLayers" Version="1.6.6" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
+		<PackageReference Include="Dapper" Version="2.1.79" />
+		<PackageReference Include="EssentialLayers" Version="1.7.2" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

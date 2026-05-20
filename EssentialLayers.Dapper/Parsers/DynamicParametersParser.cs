@@ -25,6 +25,14 @@ namespace EssentialLayers.Dapper.Parsers
 				Type type = property.PropertyType;
 
 				// Value types: int, bool, DateTime, Guid, enums, etc.
+				if (type.IsEnum)
+				{
+					Type underlyingType = Enum.GetUnderlyingType(type);
+					DbType dbType = underlyingType.ToDbType();
+					dynamicParameters.Add(parameterName, value, dbType);
+					continue;
+				}
+
 				if (type.IsValueType)
 				{
 					DbType dbType = type.ToDbType();

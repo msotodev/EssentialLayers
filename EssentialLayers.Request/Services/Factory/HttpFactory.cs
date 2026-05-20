@@ -1,7 +1,10 @@
 ﻿using EssentialLayers.Helpers.Extension;
+using EssentialLayers.Helpers.Result;
 using EssentialLayers.Request.Helpers;
+using EssentialLayers.Request.Models;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -119,6 +122,47 @@ namespace EssentialLayers.Request.Services.Factory
 			}
 		}
 
+		public async Task<Response> PostAsync(
+			string clientName, string url, FileRequest fileRequest, IDictionary<string, string>? headers = default
+		)
+		{
+			try
+			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
+				using MultipartFormDataContent form = [];
+
+				using StreamContent streamContent = new(fileRequest.Stream);
+
+				streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+				form.Add(streamContent, fileRequest.Name, fileRequest.FileName);
+
+				if (headers != null)
+				{
+					foreach (KeyValuePair<string, string> header in headers)
+					{
+						httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+					}
+				}
+
+				HttpResponseMessage response = await httpClient.PostAsync(url, form);
+
+				if (response.IsSuccessStatusCode.False())
+				{
+					string error = await response.Content.ReadAsStringAsync();
+
+					return Response.Fail(error);
+				}
+
+				return Response.Success();
+			}
+			catch (Exception e)
+			{
+				return Response.Fail(e.Message);
+			}
+		}
+
 		public async Task<HttpResponse<TResult>> PutAsync<TResult, TRequest>(string clientName, string url, TRequest request)
 		{
 			try
@@ -166,6 +210,44 @@ namespace EssentialLayers.Request.Services.Factory
 			{
 				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
 			}
+		}
+
+		public async Task<HttpResponse<TResult>> PatchAsync<TResult, TRequest>(string clientName, string url, TRequest request)
+		{
+			try
+			{
+				HttpClient httpClient = GetHttpClient(clientName);
+
+				if (httpClient == null) throw new(nameof(httpClient));
+
+				string absoluteUri = httpClient.BaseAddress?.AbsoluteUri ?? string.Empty;
+				string serialized = request.Serialize();
+
+				InfoRequest(absoluteUri, url, serialized);
+
+				AddAuth(httpClient);
+
+				HttpResponseMessage result = await httpClient.PatchAsync(url, GetContent(httpClient, serialized));
+
+				return await ManageResponse<TResult>(absoluteUri, url, result);
+			}
+			catch (Exception e)
+			{
+				return HttpResponse<TResult>.Fail(e, HttpStatusCode.InternalServerError);
+			}
+		}
+
+		public Task<HttpResponse<TResult>> PatchAsync<TResult>(
+			string clientName, string url
+		) => PatchAsync<TResult, object>(clientName, url, null!);
+
+		public async Task<Response> PatchAsync(
+			string clientName, string url
+		)
+		{
+			HttpResponse<object> result = await PatchAsync<object, object>(clientName, url, null!);
+
+			return result.Ok ? Response.Success() : Response.Fail(result.Message);
 		}
 
 		private void AddAuth(HttpClient httpClient)

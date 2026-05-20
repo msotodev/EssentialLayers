@@ -39,7 +39,7 @@ namespace EssentialLayers.Request.Helpers.Http
 		{
 			try
 			{
-				
+
 				options ??= new RequestOptions()
 				{
 					Headers = HttpOption.DefaultHeaders ?? []
@@ -55,7 +55,7 @@ namespace EssentialLayers.Request.Helpers.Http
 
 				string uri = url;
 
-				if (HttpClient.BaseAddress.NotNull()) uri = $"{HttpClient.BaseAddress!.AbsoluteUri}{url}";
+				if (HttpClient.BaseAddress != null) uri = $"{HttpClient.BaseAddress!.AbsoluteUri}{url}";
 
 				using HttpRequestMessage httpRequestMessage = new()
 				{
@@ -63,7 +63,7 @@ namespace EssentialLayers.Request.Helpers.Http
 					Method = httpMethod
 				};
 
-				if (request.NotNull())
+				if (request != null)
 				{
 					string jsonRequest = request.Serialize();
 					ResultHelper<HttpContent> contentResult = request.ToHttpContent(options.ContentType);
