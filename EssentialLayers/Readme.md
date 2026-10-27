@@ -14,6 +14,11 @@ It can be used for multiple projects in the **.NET** environment, that is, mobil
 | [Logger](/EssentialLayers/Helpers/Logger) | manage the essential methods at the app logger. |
 
 #### Release Notes
+##### v1.7.3
+ - feat: Update dependencies to the latest stable version `27-10-2026`
+ - fix: Returns object by default `27-10-2026`
+
+##### v1.x.x
  - refactor: Null support, removing IsNull and NotNull extensions and the class LoggerHelper was removed `25-02-2026`
  - refactor: improve collection return types in abstractions and bulk naming `25-02-2026`
  - feat: New GetBytes method in Extensions `25-02-2026`
