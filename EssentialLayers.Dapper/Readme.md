@@ -19,6 +19,10 @@ builder.Services.UseDapper();
 ```
 
 #### Release Notes
+##### v1.7.3
+ - feat: Update dependencies to the latest stable version `27-10-2026`
+
+##### v1.x.x
  - feat: Update dependencies to the latest stable version `07/05/2026`
  - fix: Error on use ExecuteAsync -> Response from INormalProcedure with Enum values `07/05/2026`
  - fix: Handling of "Sequence contains no elements" exception because it is not a error `07/05/2026`
