@@ -65,7 +65,9 @@ namespace EssentialLayers.Dapper.Mappers
 		{
 			if (type == null) return DbType.Object;
 
-			return DbTypeMappings[type.Name];
+			if (DbTypeMappings.TryGetValue(type.Name, out DbType dbType)) return dbType;
+
+			return DbType.Object;
 		}
 
 		/// <summary>
